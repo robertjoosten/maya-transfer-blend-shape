@@ -26,13 +26,11 @@ N O T E:
     There are a few options that can be helpful to achieve the desired
     results. 
 
-        - Scaling your delta depending on the size difference between
+        * Scaling your delta depending on the size difference between
           the source and the target vertex. 
-          
-        - Rotating the delta depending on the normal difference between 
+        * Rotating the delta depending on the normal difference between 
           the source and the target vertex. 
-          
-        - Smoothing based on the vertex size between the retarget mesh
+        * Smoothing based on the vertex size between the retarget mesh
           and the blendshape mesh.
 """
 
