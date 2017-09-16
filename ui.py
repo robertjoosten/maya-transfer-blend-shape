@@ -125,12 +125,7 @@ class SelectionWidget(QWidget):
         button = QPushButton(self)
         button.setText(label)
         button.setFont(FONT)
-        button.released.connect(
-            partial(
-                self.setSelection, 
-                selectionMode
-            )
-        )
+        button.released.connect(self.setSelection)
         
         layout.addWidget(button)
         
