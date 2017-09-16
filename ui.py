@@ -47,12 +47,25 @@ def mayaWindow():
 # ----------------------------------------------------------------------------
     
 def title(parent, name):
+    """
+    Create title ui widget.
+    
+    :param QWidget parent:
+    :param str name:
+    :rtype: QLabel
+    """
     title = QLabel(parent)
     title.setText(name)
     title.setFont(BOLT_FONT)
     return title
     
 def divider(parent):
+    """
+    Create divider ui widget.
+    
+    :param QWidget parent:
+    :rtype: QFrame
+    """
     line = QFrame(parent)
     line.setFrameShape(QFrame.HLine)
     line.setFrameShadow(QFrame.Sunken)
@@ -61,6 +74,14 @@ def divider(parent):
 # ----------------------------------------------------------------------------
 
 def getSelectedMeshes():
+    """
+    Get all selected meshes, the current selection will be looped and checked
+    if any of the selected transforms contain a mesh node. If this is the case
+    the transform will be added to the selection list.
+    
+    :return: Parents nodes of all selected meshes
+    :rtype: list
+    """
     # get selection
     selection = cmds.ls(sl=True, l=True)
     extendedSelection = []
@@ -86,6 +107,7 @@ class SelectionWidget(QWidget):
         QWidget.__init__(self, parent)
         
         # selection
+        self._selectionMode = selectionMode
         self._selection = []
 
         # create layout
@@ -106,7 +128,6 @@ class SelectionWidget(QWidget):
         button.released.connect(
             partial(
                 self.setSelection, 
-                label, 
                 selectionMode
             )
         )
@@ -121,7 +142,11 @@ class SelectionWidget(QWidget):
         
     # ------------------------------------------------------------------------
         
-    def setSelection(self, label, selectionMode="single"):
+    def setSelection(self):
+        """
+        Update the UI with the current selection, a signal is emit so the 
+        parent widget can validate the current selection.
+        """
         # get selection
         meshes = getSelectedMeshes()
 
@@ -130,7 +155,7 @@ class SelectionWidget(QWidget):
         self.label.setToolTip("\n".join(meshes))
         
         # process selection mode
-        if selectionMode == "single" and meshes:
+        if self._selectionMode == "single" and meshes:
             meshes = meshes[0]
             
         self._selection = meshes
@@ -341,6 +366,10 @@ class RetargetBlendshapeWidget(QWidget):
     # ------------------------------------------------------------------------
     
     def validate(self):
+        """
+        Validate the current selection, if the selection is valid the retarget
+        button will be enabled. If not the button will stay disabled.
+        """
         # variables
         source = self.sourceW.selection
         target = self.targetW.selection
@@ -354,7 +383,12 @@ class RetargetBlendshapeWidget(QWidget):
   
     # ------------------------------------------------------------------------
         
-    def retarget(self):   
+    def retarget(self):  
+        """
+        Read the values from the UI and call the command line convert function
+        to retarget the blendshapes. Once the blendshapes are converted the 
+        new geometry will be selected.
+        """
         # get selection
         source = self.sourceW.selection
         target = self.targetW.selection
