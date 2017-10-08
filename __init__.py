@@ -1,37 +1,49 @@
-"""					
-I N S T A L L A T I O N:
-    Copy the "rjRetargetBlendshape" folder to your Maya scripts directory:
-        C:\Users\<USER>\Documents\maya\scripts
+"""		
+Retarget your blendshapes between meshes with the same topology.
 
-U S A G E:
-    Display the UI with the following code:
-        import rjRetargetBlendshape.ui
-        rjRetargetBlendshape.ui.show()
-        
-    Command line:
-        import rjRetargetBlendshape
-        rjRetargetBlendshape.convert(
-            source,
-            blendshape,
-            target,
-            scale=True, 
-            rotate=True, 
-            smooth=0, 
-            smoothIterations=0,
-            space=OpenMaya.MSpace.kObject,
-        )
-        
-N O T E:
-    Retarget your blendshapes between meshes with the same topology.
-    There are a few options that can be helpful to achieve the desired
-    results. 
+.. figure:: https://github.com/robertjoosten/rjRetargetBlendshape/raw/master/README.png
+   :align: center
+   
+`Link to Video <https://vimeo.com/170360738>`_		
 
-        * Scaling your delta depending on the size difference between
-          the source and the target vertex. 
-        * Rotating the delta depending on the normal difference between 
-          the source and the target vertex. 
-        * Smoothing based on the vertex size between the retarget mesh
-          and the blendshape mesh.
+Installation
+============
+Copy the **rjRetargetBlendshape** folder to your Maya scripts directory
+::
+    C:/Users/<USER>/Documents/maya/scripts
+
+Usage
+=====
+Command line
+::
+    import rjRetargetBlendshape
+    rjRetargetBlendshape.convert(
+        source,
+        blendshape,
+        target,
+        scale=True, 
+        rotate=True, 
+        smooth=0, 
+        smoothIterations=0,
+        space=OpenMaya.MSpace.kObject,
+    )
+    
+Display UI
+::
+    import rjRetargetBlendshape.ui
+    rjRetargetBlendshape.ui.show()
+    
+Note
+====
+Retarget your blendshapes between meshes with the same topology. There are a 
+few options that can be helpful to achieve the desired results. 
+
+* Scaling your delta depending on the size difference between the source and the target vertex. 
+* Rotating the delta depending on the normal difference between the source and the target vertex. 
+* Smoothing based on the vertex size between the retarget mesh and the blendshape mesh.
+
+Code
+====   
 """
 
 import math

@@ -1,0 +1,395 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>rjRetargetBlendshape package &#8212; rjRetargetBlendshape  &#39;&#39; documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     ' &#39;&#39;',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">rjRetargetBlendshape  &#39;&#39; documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rjretargetblendshape-package">
+<h1>rjRetargetBlendshape package<a class="headerlink" href="#rjretargetblendshape-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rjRetargetBlendshape.ui.html">rjRetargetBlendshape.ui module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-rjRetargetBlendshape">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rjRetargetBlendshape" title="Permalink to this headline">¶</a></h2>
+<p>Retarget your blendshapes between meshes with the same topology.</p>
+<div class="figure align-center">
+<img alt="https://github.com/robertjoosten/rjRetargetBlendshape/raw/master/README.png" src="https://github.com/robertjoosten/rjRetargetBlendshape/raw/master/README.png" />
+</div>
+<p><a class="reference external" href="https://vimeo.com/170360738">Link to Video</a></p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>Copy the <strong>rjRetargetBlendshape</strong> folder to your Maya scripts directory</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Users</span><span class="o">/&lt;</span><span class="n">USER</span><span class="o">&gt;/</span><span class="n">Documents</span><span class="o">/</span><span class="n">maya</span><span class="o">/</span><span class="n">scripts</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>Command line</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rjRetargetBlendshape</span>
+<span class="n">rjRetargetBlendshape</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">,</span>
+    <span class="n">blendshape</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+    <span class="n">rotate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+    <span class="n">smooth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+    <span class="n">smoothIterations</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">space</span><span class="o">=</span><span class="n">OpenMaya</span><span class="o">.</span><span class="n">MSpace</span><span class="o">.</span><span class="n">kObject</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Display UI</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rjRetargetBlendshape.ui</span>
+<span class="n">rjRetargetBlendshape</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="note">
+<h3>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h3>
+<p>Retarget your blendshapes between meshes with the same topology. There are a 
+few options that can be helpful to achieve the desired results.</p>
+<ul class="simple">
+<li>Scaling your delta depending on the size difference between the source and the target vertex.</li>
+<li>Rotating the delta depending on the normal difference between the source and the target vertex.</li>
+<li>Smoothing based on the vertex size between the retarget mesh and the blendshape mesh.</li>
+</ul>
+</div>
+<div class="section" id="code">
+<h3>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="rjRetargetBlendshape.asComponent">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">asComponent</code><span class="sig-paren">(</span><em>index</em>, <em>t=&lt;sphinx.ext.autodoc._MockObject object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.asComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>index -&gt; OpenMaya.MFn.kComponent
+Based on the input type it will create a component type for this tool
+the following components are being used.</p>
+<ul class="simple">
+<li>OpenMaya.MFn.kMeshVertComponent</li>
+<li>OpenMaya.MFn.kMeshEdgeComponent</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>int/OpenMaya.MIntArray</em>) – indices to create component for</li>
+<li><strong>t</strong> (<em>OpenMaya.MFn.kComponent</em>) – can be all of OpenMaya component types.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Initialized components</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">OpenMaya.MFnSingleIndexedComponent</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.asMDagPath">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">asMDagPath</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.asMDagPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenMaya.MObject -&gt; OpenMaya.MDagPath</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<em>OpenMaya.MObject</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MDagPath</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.asMFnMesh">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">asMFnMesh</code><span class="sig-paren">(</span><em>dag</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.asMFnMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>OpenMaya.MDagPath -&gt; OpenMaya.MfnMesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dag</strong> (<em>OpenMaya.MDagPath</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MfnMesh</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.asMIntArray">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">asMIntArray</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.asMIntArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>index -&gt; OpenMaya.MIntArray</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int/OpenMaya.MIntArray</em>) – indices</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of indices</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MIntArray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.asMObject">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">asMObject</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.asMObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>str -&gt; OpenMaya.MObject</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – Path to Maya object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MObject</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.convert">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">convert</code><span class="sig-paren">(</span><em>source</em>, <em>blendshape</em>, <em>target</em>, <em>scale=True</em>, <em>rotate=True</em>, <em>smooth=0</em>, <em>smoothIterations=2</em>, <em>space=&lt;sphinx.ext.autodoc._MockObject object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new target based on the difference between the source and 
+blendshape. The target mesh is duplicated and the difference between 
+source and target is transfered onto the duplicated mesh. When 
+transfering both scale and rotation of the delta vectors can be taken 
+into account. Once the data is transfered an Laplacian smoothing algorithm
+can be applied onto the newly created target to create a more desired 
+result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (<em>str</em>) – </li>
+<li><strong>blendshape</strong> (<em>str</em>) – </li>
+<li><strong>target</strong> (<em>str</em>) – </li>
+<li><strong>scale</strong> (<em>bool</em>) – Take scale between delta vectors into account</li>
+<li><strong>rotate</strong> (<em>bool</em>) – Take rotation between normal vectors into account</li>
+<li><strong>smooth</strong> (<em>float</em>) – Smoothing strength</li>
+<li><strong>smoothIterations</strong> (<em>int</em>) – Times the smooth algorithm repeats</li>
+<li><strong>space</strong> (<em>OpenMaya.MSpace</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>RuntimeError</strong> – If the vertex count doesn’t match</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Name of transfered blendshape mesh</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.getAverageLength">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">getAverageLength</code><span class="sig-paren">(</span><em>dag</em>, <em>component</em>, <em>space</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.getAverageLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get average length of connected edges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dag</strong> (<em>OpenMaya.MDagPath</em>) – </li>
+<li><strong>component</strong> (<em>OpenMaya.MFnSingleIndexedComponent</em>) – </li>
+<li><strong>space</strong> (<em>OpenMaya.MSpace</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Average length of the connected edges</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.getAveragePosition">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">getAveragePosition</code><span class="sig-paren">(</span><em>dag</em>, <em>component</em>, <em>space</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.getAveragePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get average position of connected vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dag</strong> (<em>OpenMaya.MDagPath</em>) – </li>
+<li><strong>component</strong> (<em>OpenMaya.MFnSingleIndexedComponent</em>) – </li>
+<li><strong>space</strong> (<em>OpenMaya.MSpace</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Average length of the connected edges</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">OpenMaya.MPoint</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.getBasename">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">getBasename</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.getBasename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Strip the parent and namespace data of the provided string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Base name of parsed object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="rjRetargetBlendshape.setLaplacianSmooth">
+<code class="descclassname">rjRetargetBlendshape.</code><code class="descname">setLaplacianSmooth</code><span class="sig-paren">(</span><em>dag</em>, <em>index</em>, <em>space</em>, <em>sourceL</em>, <em>targetL</em>, <em>blendshapeL</em>, <em>smooth</em><span class="sig-paren">)</span><a class="headerlink" href="#rjRetargetBlendshape.setLaplacianSmooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Laplacian smoothing algorithm, where the average of the neighbouring points
+are used to smooth the target vertices, based on the factor between the 
+average length of both the source and the target mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dag</strong> (<em>OpenMaya.MDagPath</em>) – </li>
+<li><strong>index</strong> (<em>int</em>) – Component index</li>
+<li><strong>space</strong> (<em>OpenMaya.MSpace</em>) – </li>
+<li><strong>sourceL</strong> (<em>float</em>) – </li>
+<li><strong>targetL</strong> (<em>float</em>) – </li>
+<li><strong>blendshapeL</strong> (<em>float</em>) – </li>
+<li><strong>smooth</strong> (<em>float</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rjRetargetBlendshape package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-rjRetargetBlendshape">Module contents</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#note">Note</a></li>
+<li><a class="reference internal" href="#code">Code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/rjRetargetBlendshape.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">rjRetargetBlendshape  &#39;&#39; documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, &#39;Robert Joosten&#39;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

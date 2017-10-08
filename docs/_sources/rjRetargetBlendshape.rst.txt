@@ -1,0 +1,17 @@
+rjRetargetBlendshape package
+============================
+
+Submodules
+----------
+
+.. toctree::
+
+   rjRetargetBlendshape.ui
+
+Module contents
+---------------
+
+.. automodule:: rjRetargetBlendshape
+    :members:
+    :undoc-members:
+    :show-inheritance:
