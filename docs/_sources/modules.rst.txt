@@ -1,7 +1,7 @@
-rjRetargetBlendshape
-====================
+retargetBlendshape
+==================
 
 .. toctree::
    :maxdepth: 4
 
-   rjRetargetBlendshape
+   retargetBlendshape

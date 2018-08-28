@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>retargetBlendshape &#8212; retargetBlendshape  &#39;&#39; documentation</title>
+    <title>retargetBlendshape.commands module &#8212; retargetBlendshape  &#39;&#39; documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -43,25 +43,47 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="retargetblendshape">
-<h1>retargetBlendshape<a class="headerlink" href="#retargetblendshape" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="retargetBlendshape.html">retargetBlendshape package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="retargetBlendshape.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retargetBlendshape.html#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retargetBlendshape.html#note">Note</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retargetBlendshape.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="retargetBlendshape.commands.html">retargetBlendshape.commands module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="retargetBlendshape.install.html">retargetBlendshape.install module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="retargetBlendshape.ui.html">retargetBlendshape.ui module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="retargetBlendshape.utils.html">retargetBlendshape.utils module</a></li>
+  <div class="section" id="module-retargetBlendshape.commands">
+<span id="retargetblendshape-commands-module"></span><h1>retargetBlendshape.commands module<a class="headerlink" href="#module-retargetBlendshape.commands" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="retargetBlendshape.commands.convert">
+<code class="descclassname">retargetBlendshape.commands.</code><code class="descname">convert</code><span class="sig-paren">(</span><em>source</em>, <em>blendshape</em>, <em>target</em>, <em>scale=True</em>, <em>rotate=True</em>, <em>smooth=0</em>, <em>smoothIterations=2</em>, <em>space=&lt;sphinx.ext.autodoc._MockObject object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.commands.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new target based on the difference between the source and 
+blendshape. The target mesh is duplicated and the difference between 
+source and target is transfered onto the duplicated mesh. When 
+transfering both scale and rotation of the delta vectors can be taken 
+into account. Once the data is transfered an Laplacian smoothing algorithm
+can be applied onto the newly created target to create a more desired 
+result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (<em>str</em>) – </li>
+<li><strong>blendshape</strong> (<em>str</em>) – </li>
+<li><strong>target</strong> (<em>str</em>) – </li>
+<li><strong>scale</strong> (<em>bool</em>) – Take scale between delta vectors into account</li>
+<li><strong>rotate</strong> (<em>bool</em>) – Take rotation between normal vectors into account</li>
+<li><strong>smooth</strong> (<em>float</em>) – Smoothing strength</li>
+<li><strong>smoothIterations</strong> (<em>int</em>) – Times the smooth algorithm repeats</li>
+<li><strong>space</strong> (<em>OpenMaya.MSpace</em>) – </li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>RuntimeError</strong> – If the vertex count doesn’t match</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Name of transfered blendshape mesh</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -73,7 +95,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/modules.rst.txt"
+      <li><a href="_sources/retargetBlendshape.commands.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>

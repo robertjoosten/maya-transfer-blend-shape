@@ -1,0 +1,7 @@
+retargetBlendshape\.install module
+==================================
+
+.. automodule:: retargetBlendshape.install
+    :members:
+    :undoc-members:
+    :show-inheritance:

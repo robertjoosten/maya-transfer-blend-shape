@@ -1,0 +1,18 @@
+retargetBlendshape package
+==========================
+
+.. automodule:: retargetBlendshape
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   retargetBlendshape.commands
+   retargetBlendshape.install
+   retargetBlendshape.ui
+   retargetBlendshape.utils
+

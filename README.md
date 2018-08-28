@@ -1,18 +1,21 @@
-# rjRetargetBlendshape
+# maya-retarget-blendshape
 Retarget your blendshapes between meshes with the same topology.
 
-<p align="center"><img src="https://github.com/robertjoosten/rjRetargetBlendshape/blob/master/README.png"></p>
+<p align="center"><img src="docs/_images/retargetBlendshapeExample.png?raw=true"></p>
 <a href="https://vimeo.com/170360738" target="_blank"><p align="center">Click for video</p></a>
 
 ## Installation
-Copy the **rjRetargetBlendshape** folder to your Maya scripts directory:
-> C:\Users\<USER>\Documents\maya\scripts
+* Extract the content of the .rar file anywhere on disk.
+* Drag the retargetBlendshape.mel file in Maya to permanently install the script.
 
 ## Usage
+A button on the MiscTools shelf will be created that will allow easy access to the ui, this way the user doesn't need to worry about any of the code.
+If user wishes to not use the shelf button the following commands can be used.
+
 Command line:
 ```python
-import rjRetargetBlendshape
-rjRetargetBlendshape.convert(
+import retargetBlendshape
+retargetBlendshape.convert(
   source,
   blendshape,
   target,
@@ -26,8 +29,8 @@ rjRetargetBlendshape.convert(
 
 Display UI:
 ```python
-import rjRetargetBlendshape.ui
-rjRetargetBlendshape.ui.show()
+import retargetBlendshape.ui
+retargetBlendshape.ui.show()
 ```
 
 ## Note

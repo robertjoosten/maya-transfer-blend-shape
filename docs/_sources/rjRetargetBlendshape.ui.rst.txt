@@ -1,7 +1,0 @@
-rjRetargetBlendshape\.ui module
-===============================
-
-.. automodule:: rjRetargetBlendshape.ui
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,0 +1,255 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>retargetBlendshape.ui module &#8212; retargetBlendshape  &#39;&#39; documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     ' &#39;&#39;',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">retargetBlendshape  &#39;&#39; documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-retargetBlendshape.ui">
+<span id="retargetblendshape-ui-module"></span><h1>retargetBlendshape.ui module<a class="headerlink" href="#module-retargetBlendshape.ui" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="retargetBlendshape.ui.CheckBoxWidget">
+<em class="property">class </em><code class="descclassname">retargetBlendshape.ui.</code><code class="descname">CheckBoxWidget</code><span class="sig-paren">(</span><em>parent</em>, <em>label</em>, <em>toolTip</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.CheckBoxWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
+<dl class="method">
+<dt id="retargetBlendshape.ui.CheckBoxWidget.isChecked">
+<code class="descname">isChecked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.CheckBoxWidget.isChecked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="retargetBlendshape.ui.CheckBoxWidget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#retargetBlendshape.ui.CheckBoxWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="retargetBlendshape.ui.RetargetBlendshapeWidget">
+<em class="property">class </em><code class="descclassname">retargetBlendshape.ui.</code><code class="descname">RetargetBlendshapeWidget</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.RetargetBlendshapeWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
+<dl class="method">
+<dt id="retargetBlendshape.ui.RetargetBlendshapeWidget.retarget">
+<code class="descname">retarget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.RetargetBlendshapeWidget.retarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the values from the UI and call the command line convert function
+to retarget the blendshapes. Once the blendshapes are converted the
+new geometry will be selected.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="retargetBlendshape.ui.RetargetBlendshapeWidget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#retargetBlendshape.ui.RetargetBlendshapeWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="retargetBlendshape.ui.RetargetBlendshapeWidget.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.RetargetBlendshapeWidget.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the current selection, if the selection is valid the retarget
+button will be enabled. If not the button will stay disabled.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="retargetBlendshape.ui.SelectionWidget">
+<em class="property">class </em><code class="descclassname">retargetBlendshape.ui.</code><code class="descname">SelectionWidget</code><span class="sig-paren">(</span><em>parent</em>, <em>label</em>, <em>selectionMode='single'</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.SelectionWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
+<dl class="attribute">
+<dt id="retargetBlendshape.ui.SelectionWidget.selection">
+<code class="descname">selection</code><a class="headerlink" href="#retargetBlendshape.ui.SelectionWidget.selection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="retargetBlendshape.ui.SelectionWidget.setSelection">
+<code class="descname">setSelection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.SelectionWidget.setSelection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the UI with the current selection, a signal is emit so the
+parent widget can validate the current selection.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="retargetBlendshape.ui.SelectionWidget.signal">
+<code class="descname">signal</code><em class="property"> = &lt;PySide.QtCore.Signal object&gt;</em><a class="headerlink" href="#retargetBlendshape.ui.SelectionWidget.signal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="retargetBlendshape.ui.SelectionWidget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#retargetBlendshape.ui.SelectionWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="retargetBlendshape.ui.SpinBoxWidget">
+<em class="property">class </em><code class="descclassname">retargetBlendshape.ui.</code><code class="descname">SpinBoxWidget</code><span class="sig-paren">(</span><em>parent</em>, <em>widget</em>, <em>label</em>, <em>toolTip</em>, <em>value</em>, <em>minimum</em>, <em>maximum</em>, <em>step</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.SpinBoxWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
+<dl class="attribute">
+<dt id="retargetBlendshape.ui.SpinBoxWidget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#retargetBlendshape.ui.SpinBoxWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="retargetBlendshape.ui.SpinBoxWidget.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.SpinBoxWidget.value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="retargetBlendshape.ui.divider">
+<code class="descclassname">retargetBlendshape.ui.</code><code class="descname">divider</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.divider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create divider ui widget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parent</strong> (<em>QWidget</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">QFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="retargetBlendshape.ui.getIconPath">
+<code class="descclassname">retargetBlendshape.ui.</code><code class="descname">getIconPath</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.getIconPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an icon path based on file name. All paths in the XBMLANGPATH variable
+processed to see if the provided icon can be found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Icon path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str/None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="retargetBlendshape.ui.mayaWindow">
+<code class="descclassname">retargetBlendshape.ui.</code><code class="descname">mayaWindow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.mayaWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Maya’s main window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">QMainWindow</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="retargetBlendshape.ui.show">
+<code class="descclassname">retargetBlendshape.ui.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="retargetBlendshape.ui.title">
+<code class="descclassname">retargetBlendshape.ui.</code><code class="descname">title</code><span class="sig-paren">(</span><em>parent</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#retargetBlendshape.ui.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create title ui widget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>parent</strong> (<em>QWidget</em>) – </li>
+<li><strong>name</strong> (<em>str</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">QLabel</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/retargetBlendshape.ui.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">retargetBlendshape  &#39;&#39; documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, &#39;Robert Joosten&#39;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>
