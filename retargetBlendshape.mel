@@ -3,7 +3,7 @@
 // ***************************************************************************
 //
 // DESCRIPTION:
-//	Add the module which is located in the same directory as the .mel file 
+//  Add the module which is located in the same directory as the .mel file 
 //  into the first available MAYA_MODULE_PATH directory. It doesn't matter 
 //  where on disk the module lives as the script will make sure the path in 
 //  the .mod file links to the correct place. There are some basic sanity 
@@ -12,20 +12,21 @@
 //  files have to be written to and incorrectly formatted module files.
 //
 // REQUIRES:
-//	- Template .mod file ( replace regular file path with <PATH> )
+//  - Template .mod file ( replace regular file path with <PATH> )
 //  - Maya module ( scripts/icons/plug-ins etc directories )
 //
 // USAGE:
-//	source <MEL_FILE>;
+//  source <MEL_FILE>;
 //
 // AUTHORS:
-//	Robert Joosten - rwm.joosten@gmail.com
+//  Robert Joosten - rwm.joosten@gmail.com
 //
 // LICENSE:
-//	MIT
+//  MIT
 //
 // VERSIONS:
-//	1.0.0 - Aug 23, 2018 - Initial Release.
+//  1.0.0 - Aug 23, 2018 - Initial Release.
+//  1.0.1 - Sep 17, 2018 - Allow for use in paths that contain a space.
 //
 // ***************************************************************************
 
@@ -237,7 +238,10 @@ global proc installModule()
 {
     // get path from mel file
     string $melPath = `whatIs "installModule"`;
-    string $melPath = `match "[^ ]*$" $melPath`;
+    string $melPath = `match ": (.*)" $melPath`;
+    
+    int $melSize = `size $melPath`;
+    string $melPath = `substring $melPath 3 ($melSize-3)`;
     string $path = dirname($melPath);
     
     // get separator
