@@ -27,6 +27,7 @@
 // VERSIONS:
 //  1.0.0 - Aug 23, 2018 - Initial Release.
 //  1.0.1 - Sep 17, 2018 - Allow for use in paths that contain a space.
+//  1.0.2 - Oct 03, 2018 - Fix path error installing on UNIX.
 //
 // ***************************************************************************
 
@@ -212,7 +213,7 @@ proc string[] findModuleMatch(string $lines[])
 proc loadModuleExtended(string $moduleFile, string $path)
 {
     // get separator
-    string $separator = (`about -nt`) ? "/" : "\\";
+    string $separator = "/";
 
     // load module
     loadModule -load $moduleFile;
@@ -237,15 +238,15 @@ proc loadModuleExtended(string $moduleFile, string $path)
 global proc installModule()
 {
     // get path from mel file
-    string $melPath = `whatIs "installModule"`;
-    string $melPath = `match ": (.*)" $melPath`;
+    string $melWhatIs = `whatIs "installModule"`;
+    string $melWhatIsPath = `match ": (.*)" $melWhatIs`;
     
-    int $melSize = `size $melPath`;
-    string $melPath = `substring $melPath 3 ($melSize-3)`;
+    int $melSize = `size $melWhatIsPath`;
+    string $melPath = `substring $melWhatIsPath 3 ($melSize-3)`;
     string $path = dirname($melPath);
     
     // get separator
-    string $separator = (`about -nt`) ? "/" : "\\";
+    string $separator = "/";
 
     // find installed module
     string $modules[] = `moduleInfo -listModules`;
