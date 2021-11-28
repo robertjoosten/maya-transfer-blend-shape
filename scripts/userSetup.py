@@ -1,4 +1,10 @@
-from maya import utils
+from maya import cmds
 
-import retargetBlendshape.install
-utils.executeDeferred(retargetBlendshape.install.shelf)
+
+def main():
+    from retarget_blend_shape import install
+    install.execute()
+
+
+if not cmds.about(batch=True):
+    cmds.evalDeferred(main)

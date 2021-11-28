@@ -28,6 +28,7 @@
 //  1.0.0 - Aug 23, 2018 - Initial Release.
 //  1.0.1 - Sep 17, 2018 - Allow for use in paths that contain a space.
 //  1.0.2 - Oct 03, 2018 - Fix path error installing on UNIX.
+//  1.0.3 - Jun 04, 2021 - Python 2/3 compatibility
 //
 // ***************************************************************************
 
@@ -228,7 +229,7 @@ proc loadModuleExtended(string $moduleFile, string $path)
     // case execute that file.
     string $userSetup = $scriptPath + $separator + "userSetup.py";
     if (`filetest -e $userSetup` == 1)
-        python("import __main__; execfile('" + $userSetup + "', __main__.__dict__ )");
+        python("import six; import __main__; six.exec_(open('" + $userSetup + "').read(), __main__.__dict__ )");
 }
 
 
