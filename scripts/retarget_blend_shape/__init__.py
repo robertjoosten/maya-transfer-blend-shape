@@ -23,7 +23,7 @@ Display UI
     import retarget_blend_shape.ui
     retarget_blend_shape.ui.show()
 """
-from retarget_blend_shape.utils.transfer import Transfer
+from retarget_blend_shape.transfer import Transfer
 
 __author__ = "Robert Joosten"
 __version__ = "1.0.1"

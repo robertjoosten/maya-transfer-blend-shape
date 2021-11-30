@@ -6,9 +6,9 @@ ROOT_PACKAGE = __name__.rsplit(".", 1)[0]
 
 SHELF_NAME = "MiscTools"
 SHELF_TOOL = {
-    "label": "retargetBlendshape",
+    "label": "retarget-blend-shape",
     "command": "import {0}.ui; {0}.ui.show()".format(ROOT_PACKAGE),
-    "annotation": "Retarget blendshapes between meshes with the same topology.",
+    "annotation": "Retarget blend shapes between meshes with the same topology.",
     "image1": "RB_icon.png",
     "sourceType": "python"
 }
