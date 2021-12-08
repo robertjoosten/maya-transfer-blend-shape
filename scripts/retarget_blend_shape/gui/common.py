@@ -1,21 +1,15 @@
-import os
 import six
 import sys
-import logging
 import shiboken2
-from maya import OpenMayaUI
 from PySide2 import QtGui, QtCore, QtWidgets
 from functools import wraps
 
 from retarget_blend_shape.utils import decorator
 
 
-log = logging.getLogger(__name__)
 __all__ = [
     "WaitCursor",
     "get_application",
-    "get_main_window",
-    "get_icon_file_path",
     "display_error",
 ]
 
@@ -40,7 +34,7 @@ def get_application():
     Get the application making sure it is returned as a QtWidgets.QApplication
     where the instance sometimes is returned as a QtWidgets.QCoreApplication,
     which misses vital methods. At first it is attempted to create a new
-    application which is a bit backwards, but unfortunately necessary due to
+    application which is a bit backwards, but unfortunately nessecary due to
     to fact that it crashes if checked when the instance is None.
 
     :return: Application
@@ -56,37 +50,6 @@ def get_application():
         return shiboken2.wrapInstance(app_pointer, QtWidgets.QApplication)
     else:
         return app
-
-
-def get_main_window():
-    """
-    :return: Maya main window
-    :raise RuntimeError: When the main window cannot be obtained.
-    """
-    ptr = OpenMayaUI.MQtUtil.mainWindow()
-    ptr = six.integer_types[-1](ptr)
-    if ptr:
-        return shiboken2.wrapInstance(ptr, QtWidgets.QMainWindow)
-
-    raise RuntimeError("Failed to obtain a handle on the Maya main window.")
-
-
-@decorator.memoize
-def get_icon_file_path(file_name):
-    """
-    :return: Icon file path
-    :rtype: str
-    """
-    icon_directories = os.environ.get("XBMLANGPATH")
-    icon_directories = icon_directories.split(os.pathsep) if icon_directories else []
-
-    for directory in icon_directories:
-        file_path = os.path.join(directory, file_name)
-        if os.path.exists(file_path):
-            return file_path
-
-    log.debug("File '{}' not found in {}.".format(file_name, icon_directories))
-    return ":/{}".format(file_name)
 
 
 def display_error(func):
