@@ -1,0 +1,25 @@
+transfer\_blend\_shape\.gui package
+===================================
+
+.. automodule:: transfer_blend_shape.gui
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+    transfer_blend_shape.gui.widgets
+
+Submodules
+----------
+
+.. toctree::
+
+   transfer_blend_shape.gui.common
+   transfer_blend_shape.gui.dcc
+   transfer_blend_shape.gui.icon
+   transfer_blend_shape.gui.window
+

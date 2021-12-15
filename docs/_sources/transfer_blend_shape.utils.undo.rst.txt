@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.utils\.undo module
+==========================================
+
+.. automodule:: transfer_blend_shape.utils.undo
+    :members:
+    :undoc-members:
+    :show-inheritance:

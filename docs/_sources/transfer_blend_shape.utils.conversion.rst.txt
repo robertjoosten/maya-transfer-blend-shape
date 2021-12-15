@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.utils\.conversion module
+================================================
+
+.. automodule:: transfer_blend_shape.utils.conversion
+    :members:
+    :undoc-members:
+    :show-inheritance:

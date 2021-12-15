@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.install module
+======================================
+
+.. automodule:: transfer_blend_shape.install
+    :members:
+    :undoc-members:
+    :show-inheritance:

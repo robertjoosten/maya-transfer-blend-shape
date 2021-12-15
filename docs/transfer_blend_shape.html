@@ -1,0 +1,214 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>transfer_blend_shape package &#8212; transfer_blend_shape  &#39;&#39; documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     ' &#39;&#39;',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">transfer_blend_shape  &#39;&#39; documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-transfer_blend_shape">
+<span id="transfer-blend-shape-package"></span><h1>transfer_blend_shape package<a class="headerlink" href="#module-transfer_blend_shape" title="Permalink to this headline">¶</a></h1>
+<p>Transfer your blend shapes between meshes with the same topology.</p>
+<div class="figure align-center">
+<img alt="_images/transfer-blend-shape-ui.png" src="_images/transfer-blend-shape-ui.png" />
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Extract the content of the .rar file anywhere on disk.</li>
+<li>Drag the transfer-blend-shape.mel file in Maya to permanently install the script.</li>
+</ul>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>A button on the MiscTools shelf will be created that will allow easy access to
+the ui, this way the user doesn’t need to worry about any of the code. If user
+wishes to not use the shelf button the following commands can be used. The
+transfer will only work if at least one vertex has no delta, these fixed
+vertices are used to transfer the solution to the correct position in object
+space, the threshold can be increased to make sure vertices are linked.</p>
+<p>When the target is set/changed either by initializing the Transfer object or
+via the UI the LU factor is calculated, this can be quite time consuming.</p>
+<p>Command line</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transfer_blend_shape</span>
+<span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_blend_shape</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Display UI</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transfer_blend_shape.gui</span>
+<span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="note">
+<h2>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
+<p>This tool requires <em>numpy</em> and <em>scipy</em> to be installed to your environment.
+Using linux or Maya 2022+ on windows this can be done via a simple pip
+install. For older windows versions a custom version will have to be compiled
+against the correct VS version.</p>
+<p>The tool is an implementation of <a class="reference external" href="http://people.csail.mit.edu/sumner/research/deftransfer/">Deformation Transfer for Triangle Meshes</a>,
+the code was converted to python from c++ library <a class="reference external" href="https://github.com/JavongChang/ofxDeformationTransfer/">ofxDeformationTransfer</a>
+from <a class="reference external" href="https://github.com/JavongChang/">JavongChang</a> and made functional for
+Maya.</p>
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="transfer_blend_shape.gui.html">transfer_blend_shape.gui package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer_blend_shape.gui.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.gui.widgets.html">transfer_blend_shape.gui.widgets package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="transfer_blend_shape.gui.widgets.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="transfer_blend_shape.gui.widgets.divider.html">transfer_blend_shape.gui.widgets.divider module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer_blend_shape.gui.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.gui.common.html">transfer_blend_shape.gui.common module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.gui.dcc.html">transfer_blend_shape.gui.dcc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.gui.icon.html">transfer_blend_shape.gui.icon module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.gui.window.html">transfer_blend_shape.gui.window module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transfer_blend_shape.utils.html">transfer_blend_shape.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transfer_blend_shape.utils.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.utils.api.html">transfer_blend_shape.utils.api package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="transfer_blend_shape.utils.api.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="transfer_blend_shape.utils.api.conversion.html">transfer_blend_shape.utils.api.conversion module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.utils.deform.html">transfer_blend_shape.utils.deform package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="transfer_blend_shape.utils.deform.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="transfer_blend_shape.utils.deform.blend_shape.html">transfer_blend_shape.utils.deform.blend_shape module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transfer_blend_shape.utils.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.utils.conversion.html">transfer_blend_shape.utils.conversion module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.utils.decorator.html">transfer_blend_shape.utils.decorator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.utils.naming.html">transfer_blend_shape.utils.naming module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_blend_shape.utils.undo.html">transfer_blend_shape.utils.undo module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="transfer_blend_shape.install.html">transfer_blend_shape.install module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transfer_blend_shape.transfer.html">transfer_blend_shape.transfer module</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">transfer_blend_shape package</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#note">Note</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/transfer_blend_shape.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">transfer_blend_shape  &#39;&#39; documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, &#39;Robert Joosten&#39;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+transfer\_blend\_shape\.utils package
+=====================================
+
+.. automodule:: transfer_blend_shape.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+    transfer_blend_shape.utils.api
+    transfer_blend_shape.utils.deform
+
+Submodules
+----------
+
+.. toctree::
+
+   transfer_blend_shape.utils.conversion
+   transfer_blend_shape.utils.decorator
+   transfer_blend_shape.utils.naming
+   transfer_blend_shape.utils.undo
+

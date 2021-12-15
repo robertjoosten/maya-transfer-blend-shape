@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.utils\.decorator module
+===============================================
+
+.. automodule:: transfer_blend_shape.utils.decorator
+    :members:
+    :undoc-members:
+    :show-inheritance:

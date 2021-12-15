@@ -1,7 +1,0 @@
-retargetBlendshape\.commands module
-===================================
-
-.. automodule:: retargetBlendshape.commands
-    :members:
-    :undoc-members:
-    :show-inheritance:

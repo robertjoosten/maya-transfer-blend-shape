@@ -1,7 +1,0 @@
-retargetBlendshape
-==================
-
-.. toctree::
-   :maxdepth: 4
-
-   retargetBlendshape

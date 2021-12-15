@@ -2,7 +2,7 @@ from maya import cmds
 
 
 def main():
-    from retarget_blend_shape import install
+    from transfer_blend_shape import install
     install.execute()
 
 

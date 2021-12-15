@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.gui\.window module
+==========================================
+
+.. automodule:: transfer_blend_shape.gui.window
+    :members:
+    :undoc-members:
+    :show-inheritance:

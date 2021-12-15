@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.gui\.widgets\.divider module
+====================================================
+
+.. automodule:: transfer_blend_shape.gui.widgets.divider
+    :members:
+    :undoc-members:
+    :show-inheritance:

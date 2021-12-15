@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.gui\.icon module
+========================================
+
+.. automodule:: transfer_blend_shape.gui.icon
+    :members:
+    :undoc-members:
+    :show-inheritance:

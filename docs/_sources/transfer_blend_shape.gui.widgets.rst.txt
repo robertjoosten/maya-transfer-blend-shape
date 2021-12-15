@@ -1,0 +1,15 @@
+transfer\_blend\_shape\.gui\.widgets package
+============================================
+
+.. automodule:: transfer_blend_shape.gui.widgets
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   transfer_blend_shape.gui.widgets.divider
+

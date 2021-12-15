@@ -1,7 +1,0 @@
-retargetBlendshape\.utils module
-================================
-
-.. automodule:: retargetBlendshape.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:

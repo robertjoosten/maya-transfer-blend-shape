@@ -1,0 +1,15 @@
+transfer\_blend\_shape\.utils\.deform package
+=============================================
+
+.. automodule:: transfer_blend_shape.utils.deform
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   transfer_blend_shape.utils.deform.blend_shape
+

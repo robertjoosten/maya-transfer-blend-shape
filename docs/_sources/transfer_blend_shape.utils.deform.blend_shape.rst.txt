@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.utils\.deform\.blend\_shape module
+==========================================================
+
+.. automodule:: transfer_blend_shape.utils.deform.blend_shape
+    :members:
+    :undoc-members:
+    :show-inheritance:

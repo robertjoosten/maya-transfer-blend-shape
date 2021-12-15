@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.gui\.dcc module
+=======================================
+
+.. automodule:: transfer_blend_shape.gui.dcc
+    :members:
+    :undoc-members:
+    :show-inheritance:
