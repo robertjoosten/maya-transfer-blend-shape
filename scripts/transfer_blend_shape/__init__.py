@@ -22,6 +22,9 @@ The number of iterations determine the amount of times the laplacian smoothing
 matrix is applied to the deformed vertices. This smoothing matrix is
 calculated using weights determined by area difference on a per-vertex basis.
 
+When the target is set/changed either by initializing the Transfer object or
+via the UI the target matrix is calculated, this can be quite time consuming.
+
 Command line
 ::
     import transfer_blend_shape

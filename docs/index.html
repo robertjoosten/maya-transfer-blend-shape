@@ -67,6 +67,8 @@ space, the threshold can be increased to make sure vertices are linked.</p>
 <p>The number of iterations determine the amount of times the laplacian smoothing
 matrix is applied to the deformed vertices. This smoothing matrix is
 calculated using weights determined by area difference on a per-vertex basis.</p>
+<p>When the target is set/changed either by initializing the Transfer object or
+via the UI the target matrix is calculated, this can be quite time consuming.</p>
 <p>Command line</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transfer_blend_shape</span>
 <span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
