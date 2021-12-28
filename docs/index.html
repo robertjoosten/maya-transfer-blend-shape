@@ -64,8 +64,9 @@ wishes to not use the shelf button the following commands can be used. The
 transfer will only work if at least one vertex has no delta, these fixed
 vertices are used to transfer the solution to the correct position in object
 space, the threshold can be increased to make sure vertices are linked.</p>
-<p>When the target is set/changed either by initializing the Transfer object or
-via the UI the LU factor is calculated, this can be quite time consuming.</p>
+<p>The number of iterations determine the amount of times the laplacian smoothing
+matrix is applied to the deformed vertices. This smoothing matrix is
+calculated using weights determined by area difference on a per-vertex basis.</p>
 <p>Command line</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transfer_blend_shape</span>
 <span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
@@ -85,10 +86,6 @@ via the UI the LU factor is calculated, this can be quite time consuming.</p>
 Using linux or Maya 2022+ on windows this can be done via a simple pip
 install. For older windows versions a custom version will have to be compiled
 against the correct VS version.</p>
-<p>The tool is an implementation of <a class="reference external" href="http://people.csail.mit.edu/sumner/research/deftransfer/">Deformation Transfer for Triangle Meshes</a>,
-the code was converted to python from c++ library <a class="reference external" href="https://github.com/JavongChang/ofxDeformationTransfer/">ofxDeformationTransfer</a>
-from <a class="reference external" href="https://github.com/JavongChang/">JavongChang</a> and made functional for
-Maya.</p>
 </div>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>

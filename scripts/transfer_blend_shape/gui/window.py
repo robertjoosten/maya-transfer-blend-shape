@@ -68,8 +68,6 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
         target_button.setText("Set target")
         target_button.setFixedSize(button_size)
         target_button.released.connect(self.set_target_from_selection)
-        target_button.setToolTip("Setting the target will calculated the LU factor, "
-                                 "this can be quite time consuming.")
         layout.addWidget(target_button, 1, 2)
 
         # create threshold widgets
@@ -85,19 +83,31 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
                                   "vertices are considered to be static.")
         layout.addWidget(self.threshold, 2, 1, 1, 2)
 
+        # create iterations widgets
+        iterations_text = QtWidgets.QLabel(self)
+        iterations_text.setText("Iterations:")
+        layout.addWidget(iterations_text, 3, 0)
+
+        self.iterations = QtWidgets.QSpinBox(self)
+        self.iterations.setValue(3)
+        self.iterations.setMinimum(0)
+        self.iterations.setToolTip("The iterations determine the amount of smoothing "
+                                   "operations applied to the deformed vertices.")
+        layout.addWidget(self.iterations, 3, 1, 1, 2)
+
         div = widgets.DividerWidget(self)
-        layout.addWidget(div, 3, 0, 1, 3)
+        layout.addWidget(div, 4, 0, 1, 3)
 
         # create transfer widgets
         self.transfer_selection = QtWidgets.QPushButton(self)
         self.transfer_selection.setText("Transfer selection")
         self.transfer_selection.released.connect(self.transfer_from_selection)
-        layout.addWidget(self.transfer_selection, 4, 0, 1, 3)
+        layout.addWidget(self.transfer_selection, 5, 0, 1, 3)
 
         self.transfer_blend_shape = QtWidgets.QPushButton(self)
         self.transfer_blend_shape.setText("Transfer from blend shape")
         self.transfer_blend_shape.released.connect(self.transfer_from_blend_shape)
-        layout.addWidget(self.transfer_blend_shape, 5, 0, 1, 3)
+        layout.addWidget(self.transfer_blend_shape, 6, 0, 1, 3)
 
         self.reset()
 
@@ -146,13 +156,20 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
         with common.WaitCursor():
             with undo.UndoChunk():
                 for node in cmds.ls(selection=True):
-                    self.transfer.execute_from_mesh(node, threshold=self.threshold.value())
+                    self.transfer.execute_from_mesh(
+                        node,
+                        iterations=self.iterations.value(),
+                        threshold=self.threshold.value()
+                    )
 
     @common.display_error
     def transfer_from_blend_shape(self):
         with common.WaitCursor():
             with undo.UndoChunk():
-                self.transfer.execute_from_blend_shape(threshold=self.threshold.value())
+                self.transfer.execute_from_blend_shape(
+                    iterations=self.iterations.value(),
+                    threshold=self.threshold.value()
+                )
 
     def reset(self):
         """

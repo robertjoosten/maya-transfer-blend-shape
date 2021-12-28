@@ -51,6 +51,40 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Deformation transfer applies the deformation exhibited by a source mesh
 onto a different target mesh.</p>
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.calculate_area">
+<code class="descname">calculate_area</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_area" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>numpy.Array</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Triangle areas</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.calculate_deformation_gradient">
+<code class="descname">calculate_deformation_gradient</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_deformation_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>numpy.Array</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Deformation gradient</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="transfer_blend_shape.transfer.Transfer.calculate_edge_matrix">
 <em class="property">static </em><code class="descname">calculate_edge_matrix</code><span class="sig-paren">(</span><em>point1</em>, <em>point2</em>, <em>point3</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_edge_matrix" title="Permalink to this definition">¶</a></dt>
@@ -59,9 +93,9 @@ onto a different target mesh.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>point1</strong> (<em>OpenMaya.MPoint</em>) – </li>
-<li><strong>point2</strong> (<em>OpenMaya.MPoint</em>) – </li>
-<li><strong>point3</strong> (<em>OpenMaya.MPoint</em>) – </li>
+<li><strong>point1</strong> (<em>numpy.Array</em>) – </li>
+<li><strong>point2</strong> (<em>numpy.Array</em>) – </li>
+<li><strong>point3</strong> (<em>numpy.Array</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -76,17 +110,55 @@ onto a different target mesh.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="transfer_blend_shape.transfer.Transfer.calculate_source_gradient">
-<code class="descname">calculate_source_gradient</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_source_gradient" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dt id="transfer_blend_shape.transfer.Transfer.calculate_laplacian_matrix">
+<code class="descname">calculate_laplacian_matrix</code><span class="sig-paren">(</span><em>weights</em>, <em>ignore</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_laplacian_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a laplacian smoothing matrix based on the weights, for the
+smoothing the number of vertices and vertex connectivity is used
+together with the provided weights, the weights are clamped to a
+maximum of 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>OpenMaya.MPointArray</em>) – </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weights</strong> (<em>numpy.Array</em>) – </li>
+<li><strong>ignore</strong> (<em>numpy.Array</em>) – </li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Source gradient</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Laplacian smoothing matrix</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">scipy.sparse.csr.csr_matrix</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.calculate_laplacian_weights">
+<code class="descname">calculate_laplacian_weights</code><span class="sig-paren">(</span><em>points</em>, <em>ignore</em>, <em>iterations=3</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_laplacian_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the laplacian weights depending on the change in per vertex
+area between the source and target points. The calculated weights are
+smoothed a number of times defined by the iterations, this will even
+out the smooth.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<em>numpy.Array</em>) – </li>
+<li><strong>ignore</strong> (<em>numpy.Array</em>) – </li>
+<li><strong>iterations</strong> (<em>int</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Laplacian weights</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.Array</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -109,14 +181,15 @@ onto a different target mesh.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.execute">
-<code class="descname">execute</code><span class="sig-paren">(</span><em>points</em>, <em>name</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute</code><span class="sig-paren">(</span><em>points</em>, <em>name</em>, <em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>OpenMaya.MPointArray</em>) – </li>
+<li><strong>points</strong> (<em>numpy.Array</em>) – </li>
 <li><strong>name</strong> (<em>str</em>) – </li>
+<li><strong>iterations</strong> (<em>int</em>) – </li>
 <li><strong>threshold</strong> (<em>float</em>) – </li>
 </ul>
 </td>
@@ -139,12 +212,15 @@ onto a different target mesh.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.execute_from_blend_shape">
-<code class="descname">execute_from_blend_shape</code><span class="sig-paren">(</span><em>threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_blend_shape" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute_from_blend_shape</code><span class="sig-paren">(</span><em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_blend_shape" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>threshold</strong> (<em>float</em>) – </p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>iterations</strong> (<em>int</em>) – </li>
+<li><strong>threshold</strong> (<em>float</em>) – </li>
+</ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Targets</p>
@@ -166,7 +242,7 @@ onto a different target mesh.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.execute_from_mesh">
-<code class="descname">execute_from_mesh</code><span class="sig-paren">(</span><em>mesh</em>, <em>name=None</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_mesh" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute_from_mesh</code><span class="sig-paren">(</span><em>mesh</em>, <em>name=None</em>, <em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -174,6 +250,7 @@ onto a different target mesh.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>mesh</strong> (<em>str</em>) – </li>
 <li><strong>name</strong> (<em>str/None</em>) – </li>
+<li><strong>iterations</strong> (<em>int</em>) – </li>
 <li><strong>threshold</strong> (<em>float</em>) – </li>
 </ul>
 </td>
@@ -197,45 +274,22 @@ onto a different target mesh.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="transfer_blend_shape.transfer.Transfer.get_displacement">
-<code class="descname">get_displacement</code><span class="sig-paren">(</span><em>points</em>, <em>static_vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_displacement" title="Permalink to this definition">¶</a></dt>
+<dt id="transfer_blend_shape.transfer.Transfer.filter_vertices">
+<code class="descname">filter_vertices</code><span class="sig-paren">(</span><em>points</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.filter_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>OpenMaya.MPointArray</em>) – </li>
-<li><strong>static_vertices</strong> (<em>set</em><em>[</em><em>int</em><em>]</em>) – </li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Centroid</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.Array</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="transfer_blend_shape.transfer.Transfer.get_static_vertices">
-<code class="descname">get_static_vertices</code><span class="sig-paren">(</span><em>points</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_static_vertices" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>OpenMaya.MPointArray</em>) – </li>
+<li><strong>points</strong> (<em>numpy.Array</em>) – </li>
 <li><strong>threshold</strong> (<em>float</em>) – </li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Static vertices</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Static/Dynamic vertices</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">set[int]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.Array, numpy.Array</p>
 </td>
 </tr>
 </tbody>
@@ -328,6 +382,21 @@ onto a different target mesh.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="transfer_blend_shape.transfer.Transfer.source_area">
+<code class="descname">source_area</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.source_area" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source area</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="transfer_blend_shape.transfer.Transfer.source_fn">
 <code class="descname">source_fn</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.source_fn" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
@@ -351,7 +420,7 @@ onto a different target mesh.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source points</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MPointArray[OpenMaya.MPoint]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
 </tr>
 </tbody>
 </table>
@@ -396,7 +465,7 @@ onto a different target mesh.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target points</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MPointArray[OpenMaya.MPoint]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
 </tr>
 </tbody>
 </table>
