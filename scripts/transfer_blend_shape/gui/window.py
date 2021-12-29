@@ -79,6 +79,7 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
         self.threshold.setDecimals(3)
         self.threshold.setSingleStep(0.001)
         self.threshold.setValue(0.001)
+        self.threshold.valueChanged.connect(self.set_threshold)
         self.threshold.setToolTip("The threshold determines the threshold where "
                                   "vertices are considered to be static.")
         layout.addWidget(self.threshold, 2, 1, 1, 2)
@@ -91,6 +92,7 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
         self.iterations = QtWidgets.QSpinBox(self)
         self.iterations.setValue(3)
         self.iterations.setMinimum(0)
+        self.iterations.valueChanged.connect(self.set_iterations)
         self.iterations.setToolTip("The iterations determine the amount of smoothing "
                                    "operations applied to the deformed vertices.")
         layout.addWidget(self.iterations, 3, 1, 1, 2)
@@ -149,6 +151,18 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
             self.target.setText(naming.get_name(selection[0]))
             self.reset()
 
+    def set_iterations(self, iterations):
+        """
+        :param int iterations:
+        """
+        self.transfer.set_iterations(iterations)
+
+    def set_threshold(self, threshold):
+        """
+        :param float threshold:
+        """
+        self.transfer.set_threshold(threshold)
+
     # ------------------------------------------------------------------------
 
     @common.display_error
@@ -156,20 +170,13 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
         with common.WaitCursor():
             with undo.UndoChunk():
                 for node in cmds.ls(selection=True):
-                    self.transfer.execute_from_mesh(
-                        node,
-                        iterations=self.iterations.value(),
-                        threshold=self.threshold.value()
-                    )
+                    self.transfer.execute_from_mesh(node)
 
     @common.display_error
     def transfer_from_blend_shape(self):
         with common.WaitCursor():
             with undo.UndoChunk():
-                self.transfer.execute_from_blend_shape(
-                    iterations=self.iterations.value(),
-                    threshold=self.threshold.value()
-                )
+                self.transfer.execute_from_blend_shape()
 
     def reset(self):
         """

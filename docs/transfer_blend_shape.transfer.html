@@ -47,7 +47,7 @@
 <span id="transfer-blend-shape-transfer-module"></span><h1>transfer_blend_shape.transfer module<a class="headerlink" href="#module-transfer_blend_shape.transfer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="transfer_blend_shape.transfer.Transfer">
-<em class="property">class </em><code class="descclassname">transfer_blend_shape.transfer.</code><code class="descname">Transfer</code><span class="sig-paren">(</span><em>source=None</em>, <em>target=None</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">transfer_blend_shape.transfer.</code><code class="descname">Transfer</code><span class="sig-paren">(</span><em>source=None</em>, <em>target=None</em>, <em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Deformation transfer applies the deformation exhibited by a source mesh
 onto a different target mesh.</p>
@@ -115,7 +115,7 @@ onto a different target mesh.</p>
 <dd><p>Create a laplacian smoothing matrix based on the weights, for the
 smoothing the number of vertices and vertex connectivity is used
 together with the provided weights, the weights are clamped to a
-maximum of 1.</p>
+maximum of 1. Any ignore indices will have their weights set to 0.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -138,7 +138,7 @@ maximum of 1.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.calculate_laplacian_weights">
-<code class="descname">calculate_laplacian_weights</code><span class="sig-paren">(</span><em>points</em>, <em>ignore</em>, <em>iterations=3</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_laplacian_weights" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calculate_laplacian_weights</code><span class="sig-paren">(</span><em>points</em>, <em>ignore</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_laplacian_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the laplacian weights depending on the change in per vertex
 area between the source and target points. The calculated weights are
 smoothed a number of times defined by the iterations, this will even
@@ -150,7 +150,6 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>points</strong> (<em>numpy.Array</em>) – </li>
 <li><strong>ignore</strong> (<em>numpy.Array</em>) – </li>
-<li><strong>iterations</strong> (<em>int</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -181,7 +180,7 @@ out the smooth.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.execute">
-<code class="descname">execute</code><span class="sig-paren">(</span><em>points</em>, <em>name</em>, <em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute</code><span class="sig-paren">(</span><em>points</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -189,8 +188,6 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>points</strong> (<em>numpy.Array</em>) – </li>
 <li><strong>name</strong> (<em>str</em>) – </li>
-<li><strong>iterations</strong> (<em>int</em>) – </li>
-<li><strong>threshold</strong> (<em>float</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -212,24 +209,18 @@ out the smooth.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.execute_from_blend_shape">
-<code class="descname">execute_from_blend_shape</code><span class="sig-paren">(</span><em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_blend_shape" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute_from_blend_shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_blend_shape" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>iterations</strong> (<em>int</em>) – </li>
-<li><strong>threshold</strong> (<em>float</em>) – </li>
-</ul>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Targets</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Targets</p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">list[str]</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">list[str]</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><strong>RuntimeError</strong> – When transfer is invalid.</li>
 <li><strong>RuntimeError</strong> – When no blend shape is connected to the source.</li>
 <li><strong>RuntimeError</strong> – When no static vertices are found.</li>
@@ -242,7 +233,7 @@ out the smooth.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.execute_from_mesh">
-<code class="descname">execute_from_mesh</code><span class="sig-paren">(</span><em>mesh</em>, <em>name=None</em>, <em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_mesh" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute_from_mesh</code><span class="sig-paren">(</span><em>mesh</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.execute_from_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -250,8 +241,6 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>mesh</strong> (<em>str</em>) – </li>
 <li><strong>name</strong> (<em>str/None</em>) – </li>
-<li><strong>iterations</strong> (<em>int</em>) – </li>
-<li><strong>threshold</strong> (<em>float</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -275,22 +264,16 @@ out the smooth.</p>
 
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.filter_vertices">
-<code class="descname">filter_vertices</code><span class="sig-paren">(</span><em>points</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.filter_vertices" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filter_vertices</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.filter_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>points</strong> (<em>numpy.Array</em>) – </li>
-<li><strong>threshold</strong> (<em>float</em>) – </li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>numpy.Array</em>) – </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Static/Dynamic vertices</p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Static/Dynamic vertices</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy.Array, numpy.Array</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array, numpy.Array</td>
 </tr>
 </tbody>
 </table>
@@ -321,6 +304,41 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Valid state + blend shape</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="transfer_blend_shape.transfer.Transfer.iterations">
+<code class="descname">iterations</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.iterations" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Iterations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.set_iterations">
+<code class="descname">set_iterations</code><span class="sig-paren">(</span><em>iterations</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_iterations" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iterations</strong> (<em>int</em>) – </p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – When iterations is not a int.</li>
+<li><strong>ValueError</strong> – When iterations is lower than 0.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -359,6 +377,26 @@ out the smooth.</p>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><strong>RuntimeError</strong> – When source is not a mesh.</li>
 <li><strong>RuntimeError</strong> – When source vertex count doesn’t match target.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.set_threshold">
+<code class="descname">set_threshold</code><span class="sig-paren">(</span><em>threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>threshold</strong> (<em>float</em>) – </p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – When threshold is not a float or int.</li>
+<li><strong>ValueError</strong> – When threshold is lower or equal to 0.</li>
 </ul>
 </td>
 </tr>
@@ -466,6 +504,21 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target points</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="transfer_blend_shape.transfer.Transfer.threshold">
+<code class="descname">threshold</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.threshold" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Threshold</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
 </tbody>
 </table>

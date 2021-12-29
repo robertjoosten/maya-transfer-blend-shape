@@ -25,9 +25,9 @@ via the UI the target matrix is calculated, this can be quite time consuming.
 Command line:
 ```python
 import transfer_blend_shape
-transfer = transfer_blend_shape.Transfer(source, target)
-transfer.execute_from_mesh(mesh, name, threshold=0.001)
-transfer.execute_from_blend_shape(threshold=0.001)
+transfer = transfer_blend_shape.Transfer(source, target, iterations=3, threshold=0.001)
+transfer.execute_from_mesh(mesh, name)
+transfer.execute_from_blend_shape()
 ```
 
 Display UI:

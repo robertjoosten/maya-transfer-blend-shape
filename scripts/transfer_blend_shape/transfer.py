@@ -21,7 +21,7 @@ class Transfer(object):
     Deformation transfer applies the deformation exhibited by a source mesh
     onto a different target mesh.
     """
-    def __init__(self, source=None, target=None):
+    def __init__(self, source=None, target=None, iterations=3, threshold=0.001):
         # variables
         self._source = None
         self._source_fn = OpenMaya.MFnMesh()
@@ -40,6 +40,11 @@ class Transfer(object):
             self.set_source(source)
         if target is not None:
             self.set_target(target)
+
+        self._threshold = None
+        self._iterations = None
+        self.set_iterations(iterations)
+        self.set_threshold(threshold)
 
     # ------------------------------------------------------------------------
 
@@ -164,6 +169,50 @@ class Transfer(object):
 
     # ------------------------------------------------------------------------
 
+    @property
+    def iterations(self):
+        """
+        :return: Iterations
+        :rtype: int
+        """
+        return self._iterations
+
+    def set_iterations(self, iterations):
+        """
+        :param int iterations:
+        :raise TypeError: When iterations is not a int.
+        :raise ValueError: When iterations is lower than 0.
+        """
+        if not isinstance(iterations, int):
+            raise TypeError("Unable to set iterations, should be of type int.")
+        elif iterations < 0:
+            raise ValueError("Num iterations are not allowed to be lower than 0.")
+
+        self._iterations = iterations
+
+    @property
+    def threshold(self):
+        """
+        :return: Threshold
+        :rtype: float
+        """
+        return self._threshold
+
+    def set_threshold(self, threshold):
+        """
+        :param float threshold:
+        :raise TypeError: When threshold is not a float or int.
+        :raise ValueError: When threshold is lower or equal to 0.
+        """
+        if not isinstance(threshold, (float, int)):
+            raise TypeError("Unable to set threshold, should be of type int/float.")
+        elif threshold <= 0.0:
+            raise ValueError("Threshold is not allowed to be 0.0 or lower.")
+
+        self._threshold = threshold
+
+    # ------------------------------------------------------------------------
+
     def is_valid(self):
         """
         :return: Valid state
@@ -217,15 +266,14 @@ class Transfer(object):
 
     # ------------------------------------------------------------------------
 
-    def filter_vertices(self, points, threshold=0.001):
+    def filter_vertices(self, points):
         """
         :param numpy.Array points:
-        :param float threshold:
         :return: Static/Dynamic vertices
         :rtype: numpy.Array, numpy.Array
         """
         lengths = scipy.linalg.norm(self.source_points - points, axis=1)
-        return numpy.nonzero(lengths <= threshold)[0], numpy.nonzero(lengths > threshold)[0]
+        return numpy.nonzero(lengths <= self.threshold)[0], numpy.nonzero(lengths > self.threshold)[0]
 
     def calculate_deformation_gradient(self, points):
         """
@@ -271,7 +319,7 @@ class Transfer(object):
 
         return vertex_area
 
-    def calculate_laplacian_weights(self, points, ignore, iterations=3):
+    def calculate_laplacian_weights(self, points, ignore):
         """
         Calculate the laplacian weights depending on the change in per vertex
         area between the source and target points. The calculated weights are
@@ -280,7 +328,6 @@ class Transfer(object):
 
         :param numpy.Array points:
         :param numpy.Array ignore:
-        :param int iterations:
         :return: Laplacian weights
         :rtype: numpy.Array
         """
@@ -289,7 +336,7 @@ class Transfer(object):
         weights = numpy.max(weights.transpose(), axis=0) / numpy.min(weights.transpose(), axis=0) - 1
         smoothing_matrix = self.calculate_laplacian_matrix(numpy.ones(len(points)), ignore)
 
-        for _ in range(iterations):
+        for _ in range(self.iterations):
             diff = numpy.array(smoothing_matrix.dot(weights))
             weights = weights - diff
 
@@ -300,7 +347,7 @@ class Transfer(object):
         Create a laplacian smoothing matrix based on the weights, for the
         smoothing the number of vertices and vertex connectivity is used
         together with the provided weights, the weights are clamped to a
-        maximum of 1.
+        maximum of 1. Any ignore indices will have their weights set to 0.
 
         :param numpy.Array weights:
         :param numpy.Array ignore:
@@ -316,20 +363,18 @@ class Transfer(object):
             weight = min([weights[i], 1])
             indices = self.connectivity_indices[i]
             z = len(indices)
-            data = data + ([i] * (z + 1))
-            rows = rows + indices + [i]
-            columns = columns + ([-weight / float(z)] * z) + [weight]
+            data += ([i] * (z + 1))
+            rows += indices + [i]
+            columns += ([-weight / float(z)] * z) + [weight]
 
         return scipy.sparse.coo_matrix((columns, (data, rows)), shape=(num, num)).tocsr()
 
     # ------------------------------------------------------------------------
 
-    def execute(self, points, name, iterations=3, threshold=0.001):
+    def execute(self, points, name):
         """
         :param numpy.Array points:
         :param str name:
-        :param int iterations:
-        :param float threshold:
         :return: Target
         :rtype: str
         :raise RuntimeError: When transfer is invalid.
@@ -340,7 +385,7 @@ class Transfer(object):
         if not self.is_valid():
             raise RuntimeError("Invalid transfer, set source and target.")
 
-        static_vertices, dynamic_vertices = self.filter_vertices(points, threshold=threshold)
+        static_vertices, dynamic_vertices = self.filter_vertices(points)
         if not len(static_vertices):
             raise RuntimeError("No static vertices found for target '{}', "
                                "try increasing the threshold".format(name))
@@ -349,44 +394,49 @@ class Transfer(object):
             log.info("Transferred '{}' as a static mesh.".format(name))
             return target
 
+        # calculate deformation gradient, the static vertices are used to
+        # anchor the static vertices in place.
         static_matrix = self.target_matrix[:, static_vertices]
         static_points = self.target_points[static_vertices, :]
         static_gradient = numpy.dot(static_matrix, static_points)
         deformation_gradient = self.calculate_deformation_gradient(points) - static_gradient
 
+        # isolate dynamic vertices and solve their position. As it is quicker
+        # to set all points rather than individual ones the entire target
+        # point list is constructed.
         dynamic_matrix = self.target_matrix[:, dynamic_vertices]
         dynamic_matrix_transpose = dynamic_matrix.transpose()
-
         lu, piv = scipy.linalg.lu_factor(numpy.dot(dynamic_matrix_transpose, dynamic_matrix))
         uts = numpy.dot(dynamic_matrix_transpose, deformation_gradient)
-
         dynamic_points = scipy.linalg.lu_solve((lu, piv), uts)
+
         target_points = self.target_points.copy()
         target_points[dynamic_vertices, :] = dynamic_points
 
-        smoothing_weights = self.calculate_laplacian_weights(points, static_vertices, iterations)
+        # calculate the laplacian smoothing weights/matrix using the
+        # per-vertex area difference, this will ensure area's with most
+        # highest difference receive the most smoothing, these are applied
+        # to the calculated points
+        smoothing_weights = self.calculate_laplacian_weights(points, static_vertices)
         smoothing_matrix = self.calculate_laplacian_matrix(smoothing_weights, static_vertices)
-        for _ in range(iterations):
+        for _ in range(self.iterations):
             diff = numpy.array(smoothing_matrix.dot(target_points))
             target_points = target_points - diff
 
-        target_points = [OpenMaya.MPoint(point) for point in target_points]
-
+        # duplicate the original target and update its points
         target = cmds.duplicate(self.target, name=name)[0]
         target_dag = api.conversion.get_dag(target)
         target_dag.extendToShape()
         target_fn = OpenMaya.MFnMesh(target_dag)
-        target_fn.setPoints(target_points, OpenMaya.MSpace.kObject)
+        target_fn.setPoints([OpenMaya.MPoint(point) for point in target_points], OpenMaya.MSpace.kObject)
         log.info("Transferred '{}' in {:.3f} seconds.".format(name, time.time() - t))
 
         return target
 
-    def execute_from_mesh(self, mesh, name=None, iterations=3, threshold=0.001):
+    def execute_from_mesh(self, mesh, name=None):
         """
         :param str mesh:
         :param str/None name:
-        :param int iterations:
-        :param float threshold:
         :return: Target
         :rtype: str
         :raise RuntimeError: When transfer is invalid.
@@ -409,12 +459,10 @@ class Transfer(object):
 
         name = name if name is not None else "{}_TGT".format(mesh_name)
         points = mesh_fn.getPoints(OpenMaya.MSpace.kObject)
-        return self.execute(points, name, iterations, threshold)
+        return self.execute(points, name)
 
-    def execute_from_blend_shape(self, iterations=3, threshold=0.001):
+    def execute_from_blend_shape(self):
         """
-        :param int iterations:
-        :param float threshold:
         :return: Targets
         :rtype: list[str]
         :raise RuntimeError: When transfer is invalid.
@@ -435,7 +483,7 @@ class Transfer(object):
             points = numpy.array(self.source_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
             cmds.setAttr("{}.{}".format(bs, name), 0)
 
-            target = self.execute(points, name, iterations, threshold)
+            target = self.execute(points, name)
             targets.append(target)
 
         return targets

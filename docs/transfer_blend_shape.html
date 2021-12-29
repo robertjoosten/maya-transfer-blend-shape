@@ -71,9 +71,9 @@ calculated using weights determined by area difference on a per-vertex basis.</p
 via the UI the target matrix is calculated, this can be quite time consuming.</p>
 <p>Command line</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transfer_blend_shape</span>
-<span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-<span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
-<span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_blend_shape</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_blend_shape</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Display UI</p>
