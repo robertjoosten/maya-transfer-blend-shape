@@ -18,12 +18,15 @@ transfer will only work if at least one vertex has no delta, these fixed
 vertices are used to transfer the solution to the correct position in object
 space, the threshold can be increased to make sure vertices are linked.
 
+When the target is set/changed either by initializing the Transfer object or
+via the UI the target matrix is calculated, this can be quite time consuming.
+
 The number of iterations determine the amount of times the laplacian smoothing
 matrix is applied to the deformed vertices. This smoothing matrix is
 calculated using weights determined by area difference on a per-vertex basis.
 
-When the target is set/changed either by initializing the Transfer object or
-via the UI the target matrix is calculated, this can be quite time consuming.
+Colour sets can be created to visualize the deformed vertices and the
+laplacian smoothing weights.
 
 Command line
 ::

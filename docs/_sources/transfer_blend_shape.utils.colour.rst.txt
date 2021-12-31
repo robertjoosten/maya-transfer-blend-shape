@@ -1,0 +1,7 @@
+transfer\_blend\_shape\.utils\.colour module
+============================================
+
+.. automodule:: transfer_blend_shape.utils.colour
+    :members:
+    :undoc-members:
+    :show-inheritance:

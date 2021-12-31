@@ -9,6 +9,7 @@ from maya.api import OpenMaya
 
 from transfer_blend_shape.utils import api
 from transfer_blend_shape.utils import naming
+from transfer_blend_shape.utils import colour
 from transfer_blend_shape.utils import conversion
 from transfer_blend_shape.utils.deform import blend_shape
 
@@ -21,7 +22,14 @@ class Transfer(object):
     Deformation transfer applies the deformation exhibited by a source mesh
     onto a different target mesh.
     """
-    def __init__(self, source=None, target=None, iterations=3, threshold=0.001):
+    def __init__(
+            self,
+            source=None,
+            target=None,
+            iterations=3,
+            threshold=0.001,
+            create_colour_sets=False
+    ):
         # variables
         self._source = None
         self._source_fn = OpenMaya.MFnMesh()
@@ -41,10 +49,13 @@ class Transfer(object):
         if target is not None:
             self.set_target(target)
 
-        self._threshold = None
-        self._iterations = None
+        self._threshold = 0.001
+        self._iterations = 3
+        self._create_colour_sets = False
+
         self.set_iterations(iterations)
         self.set_threshold(threshold)
+        self.set_create_colour_sets(create_colour_sets)
 
     # ------------------------------------------------------------------------
 
@@ -211,6 +222,23 @@ class Transfer(object):
 
         self._threshold = threshold
 
+    @property
+    def create_colour_sets(self):
+        """
+        :return: Create colour sets state
+        :rtype: bool
+        """
+        return self._create_colour_sets
+
+    def set_create_colour_sets(self, state):
+        """
+        :param bool state:
+        """
+        if not isinstance(state, bool):
+            raise TypeError("Unable to set colour set creation state, should be of type bool.")
+
+        self._create_colour_sets = state
+
     # ------------------------------------------------------------------------
 
     def is_valid(self):
@@ -228,6 +256,37 @@ class Transfer(object):
         return bool(blend_shape.get_blend_shape(self.source)) if self.is_valid() else False
 
     # ------------------------------------------------------------------------
+
+    def filter_vertices(self, points):
+        """
+        :param numpy.Array points:
+        :return: Static/Dynamic vertices
+        :rtype: numpy.Array, numpy.Array
+        """
+        lengths = scipy.linalg.norm(self.source_points - points, axis=1)
+        return numpy.nonzero(lengths <= self.threshold)[0], numpy.nonzero(lengths > self.threshold)[0]
+
+    def calculate_area(self, points):
+        """
+        :param numpy.Array points:
+        :return: Triangle areas
+        :rtype: numpy.Array
+        """
+        vertex_area = numpy.zeros(shape=(len(points),))
+        triangle_points = numpy.take(points, self.triangle_indices, axis=0)
+        triangle_points = triangle_points.reshape((len(triangle_points) / 3, 3, 3))
+
+        length = triangle_points - triangle_points[:, [1, 2, 0], :]
+        length = scipy.linalg.norm(length, axis=2)
+
+        s = numpy.sum(length, axis=1) / 2.0
+        areas = numpy.sqrt(s * (s - length[:, 0]) * (s - length[:, 1]) * (s - length[:, 2]))
+
+        for indices, area in zip(conversion.as_chunks(self.triangle_indices, 3), areas):
+            for index in indices:
+                vertex_area[index] += area
+
+        return vertex_area
 
     @staticmethod
     def calculate_edge_matrix(point1, point2, point3):
@@ -264,17 +323,6 @@ class Transfer(object):
 
         return matrix
 
-    # ------------------------------------------------------------------------
-
-    def filter_vertices(self, points):
-        """
-        :param numpy.Array points:
-        :return: Static/Dynamic vertices
-        :rtype: numpy.Array, numpy.Array
-        """
-        lengths = scipy.linalg.norm(self.source_points - points, axis=1)
-        return numpy.nonzero(lengths <= self.threshold)[0], numpy.nonzero(lengths > self.threshold)[0]
-
     def calculate_deformation_gradient(self, points):
         """
         :param numpy.Array points:
@@ -294,30 +342,6 @@ class Transfer(object):
             matrix[i * 3: i * 3 + 3] = sat
 
         return matrix
-
-    # ------------------------------------------------------------------------
-
-    def calculate_area(self, points):
-        """
-        :param numpy.Array points:
-        :return: Triangle areas
-        :rtype: numpy.Array
-        """
-        vertex_area = numpy.zeros(shape=(len(points), ))
-        triangle_points = numpy.take(points, self.triangle_indices, axis=0)
-        triangle_points = triangle_points.reshape((len(triangle_points) / 3, 3, 3))
-
-        length = triangle_points - triangle_points[:, [1, 2, 0], :]
-        length = scipy.linalg.norm(length, axis=2)
-
-        s = numpy.sum(length, axis=1) / 2.0
-        areas = numpy.sqrt(s*(s-length[:, 0])*(s-length[:, 1])*(s-length[:, 2]))
-
-        for indices, area in zip(conversion.as_chunks(self.triangle_indices, 3), areas):
-            for index in indices:
-                vertex_area[index] += area
-
-        return vertex_area
 
     def calculate_laplacian_weights(self, points, ignore):
         """
@@ -385,11 +409,11 @@ class Transfer(object):
         if not self.is_valid():
             raise RuntimeError("Invalid transfer, set source and target.")
 
-        static_vertices, dynamic_vertices = self.filter_vertices(points)
+        static_vertices, deformed_vertices = self.filter_vertices(points)
         if not len(static_vertices):
             raise RuntimeError("No static vertices found for target '{}', "
                                "try increasing the threshold".format(name))
-        elif not len(dynamic_vertices):
+        elif not len(deformed_vertices):
             target = cmds.duplicate(self.target, name=name)[0]
             log.info("Transferred '{}' as a static mesh.".format(name))
             return target
@@ -404,14 +428,14 @@ class Transfer(object):
         # isolate dynamic vertices and solve their position. As it is quicker
         # to set all points rather than individual ones the entire target
         # point list is constructed.
-        dynamic_matrix = self.target_matrix[:, dynamic_vertices]
-        dynamic_matrix_transpose = dynamic_matrix.transpose()
-        lu, piv = scipy.linalg.lu_factor(numpy.dot(dynamic_matrix_transpose, dynamic_matrix))
-        uts = numpy.dot(dynamic_matrix_transpose, deformation_gradient)
-        dynamic_points = scipy.linalg.lu_solve((lu, piv), uts)
+        deformed_matrix = self.target_matrix[:, deformed_vertices]
+        deformed_matrix_transpose = deformed_matrix.transpose()
+        lu, piv = scipy.linalg.lu_factor(numpy.dot(deformed_matrix_transpose, deformed_matrix))
+        uts = numpy.dot(deformed_matrix_transpose, deformation_gradient)
+        deformed_points = scipy.linalg.lu_solve((lu, piv), uts)
 
         target_points = self.target_points.copy()
-        target_points[dynamic_vertices, :] = dynamic_points
+        target_points[deformed_vertices, :] = deformed_points
 
         # calculate the laplacian smoothing weights/matrix using the
         # per-vertex area difference, this will ensure area's with most
@@ -429,6 +453,16 @@ class Transfer(object):
         target_dag.extendToShape()
         target_fn = OpenMaya.MFnMesh(target_dag)
         target_fn.setPoints([OpenMaya.MPoint(point) for point in target_points], OpenMaya.MSpace.kObject)
+
+        # create an deformed vertices and weight map colour set on the target
+        # that can be used for debugging reasons.
+        if self.create_colour_sets:
+            vertices = set(deformed_vertices)
+            vertices_colour = [[int(index in vertices)] * 3 for index in range(target_fn.numVertices)]
+            weights_colour = [[weight] * 3 for weight in smoothing_weights]
+            colour.create_colour_set(target, "deformed", vertices_colour)
+            colour.create_colour_set(target, "weights", weights_colour)
+
         log.info("Transferred '{}' in {:.3f} seconds.".format(name, time.time() - t))
 
         return target

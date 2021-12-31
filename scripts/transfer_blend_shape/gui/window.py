@@ -97,19 +97,30 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
                                    "operations applied to the deformed vertices.")
         layout.addWidget(self.iterations, 3, 1, 1, 2)
 
+        # create colour set widgets
+        colour_sets_text = QtWidgets.QLabel(self)
+        colour_sets_text.setText("Colour sets:")
+        layout.addWidget(colour_sets_text, 4, 0)
+
+        self.create_colour_sets = QtWidgets.QCheckBox(self)
+        self.create_colour_sets.stateChanged.connect(self.set_create_colour_sets)
+        self.create_colour_sets.setToolTip("Colour sets will be created that will visualize "
+                                           "the deformed vertices and the smoothing weights.")
+        layout.addWidget(self.create_colour_sets, 4, 1, 1, 2)
+
         div = widgets.DividerWidget(self)
-        layout.addWidget(div, 4, 0, 1, 3)
+        layout.addWidget(div, 5, 0, 1, 3)
 
         # create transfer widgets
         self.transfer_selection = QtWidgets.QPushButton(self)
         self.transfer_selection.setText("Transfer selection")
         self.transfer_selection.released.connect(self.transfer_from_selection)
-        layout.addWidget(self.transfer_selection, 5, 0, 1, 3)
+        layout.addWidget(self.transfer_selection, 6, 0, 1, 3)
 
         self.transfer_blend_shape = QtWidgets.QPushButton(self)
         self.transfer_blend_shape.setText("Transfer from blend shape")
         self.transfer_blend_shape.released.connect(self.transfer_from_blend_shape)
-        layout.addWidget(self.transfer_blend_shape, 6, 0, 1, 3)
+        layout.addWidget(self.transfer_blend_shape, 7, 0, 1, 3)
 
         self.reset()
 
@@ -162,6 +173,12 @@ class TransferBlendShapeWidget(QtWidgets.QWidget):
         :param float threshold:
         """
         self.transfer.set_threshold(threshold)
+
+    def set_create_colour_sets(self, state):
+        """
+        :param int state:
+        """
+        self.transfer.set_create_colour_sets(bool(state))
 
     # ------------------------------------------------------------------------
 

@@ -47,7 +47,7 @@
 <span id="transfer-blend-shape-transfer-module"></span><h1>transfer_blend_shape.transfer module<a class="headerlink" href="#module-transfer_blend_shape.transfer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="transfer_blend_shape.transfer.Transfer">
-<em class="property">class </em><code class="descclassname">transfer_blend_shape.transfer.</code><code class="descname">Transfer</code><span class="sig-paren">(</span><em>source=None</em>, <em>target=None</em>, <em>iterations=3</em>, <em>threshold=0.001</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">transfer_blend_shape.transfer.</code><code class="descname">Transfer</code><span class="sig-paren">(</span><em>source=None</em>, <em>target=None</em>, <em>iterations=3</em>, <em>threshold=0.001</em>, <em>create_colour_sets=False</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Deformation transfer applies the deformation exhibited by a source mesh
 onto a different target mesh.</p>
@@ -173,6 +173,21 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target matrix</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="transfer_blend_shape.transfer.Transfer.create_colour_sets">
+<code class="descname">create_colour_sets</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.create_colour_sets" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Create colour sets state</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
@@ -319,6 +334,19 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Iterations</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.set_create_colour_sets">
+<code class="descname">set_create_colour_sets</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_create_colour_sets" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> (<em>bool</em>) – </td>
 </tr>
 </tbody>
 </table>

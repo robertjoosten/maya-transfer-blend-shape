@@ -19,6 +19,7 @@ Submodules
 
 .. toctree::
 
+   transfer_blend_shape.utils.colour
    transfer_blend_shape.utils.conversion
    transfer_blend_shape.utils.decorator
    transfer_blend_shape.utils.naming
