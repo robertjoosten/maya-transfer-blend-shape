@@ -23,10 +23,16 @@ def execute():
     shelf_main = mel.eval("$tmpVar=$gShelfTopLevel")
     shelves = cmds.tabLayout(shelf_main, query=True, childArray=True)
 
-    if SHELF_NAME in shelves:
-        cmds.deleteUI(SHELF_NAME)
+    if SHELF_NAME not in shelves:
+        cmds.shelfLayout(SHELF_NAME, parent=shelf_main)
 
-    cmds.shelfLayout(SHELF_NAME, parent=shelf_main)
+    names = cmds.shelfLayout(SHELF_NAME, query=True, childArray=True) or []
+    labels = [cmds.shelfButton(n, query=True, label=True) for n in names]
+
+    if SHELF_TOOL.get("label") in labels:
+        index = labels.index(SHELF_TOOL.get("label"))
+        cmds.deleteUI(names[index])
+
     if SHELF_TOOL.get("image1"):
         cmds.shelfButton(style="iconOnly", parent=SHELF_NAME, **SHELF_TOOL)
     else:
