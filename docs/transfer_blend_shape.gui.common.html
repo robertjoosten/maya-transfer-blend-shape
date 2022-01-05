@@ -55,12 +55,12 @@ to the user a task is being calculated.</p>
 
 <dl class="function">
 <dt id="transfer_blend_shape.gui.common.get_application">
-<code class="descclassname">transfer_blend_shape.gui.common.</code><code class="descname">get_application</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.gui.common.get_application" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the application making sure it is returned as a QtWidgets.QApplication
-where the instance sometimes is returned as a QtWidgets.QCoreApplication,
-which misses vital methods. At first it is attempted to create a new
-application which is a bit backwards, but unfortunately nessecary due to
-to fact that it crashes if checked when the instance is None.</p>
+<code class="descclassname">transfer_blend_shape.gui.common.</code><code class="descname">get_application</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.gui.common.get_application" title="Permalink to this definition">¶</a></dt>
+<dd><p>Due to some strange bugs this turns out to be more complicated then it
+should be. Sometimes we can’t rely on the instance, sometimes the qApp
+doesn’t exist. This attempts to get it from a global variable first and
+fall back on the instance. When a QCoreApplication is returned by either
+the q_application or the instance it is cast into a QApplication object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -123,7 +123,7 @@ necessary to keep an eye out for the script editor.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, &#39;Robert Joosten&#39;.
+        &#169; Copyright 2022, &#39;Robert Joosten&#39;.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
   </body>

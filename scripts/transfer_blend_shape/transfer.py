@@ -492,7 +492,7 @@ class Transfer(object):
             raise RuntimeError("Mesh '{}' vertex count doesn't match with source.".format(mesh_name))
 
         name = name if name is not None else "{}_TGT".format(mesh_name)
-        points = mesh_fn.getPoints(OpenMaya.MSpace.kObject)
+        points = numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
         return self.execute(points, name)
 
     def execute_from_blend_shape(self):

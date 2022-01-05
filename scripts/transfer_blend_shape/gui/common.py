@@ -1,10 +1,8 @@
 import six
 import sys
 import shiboken2
-from PySide2 import QtGui, QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets
 from functools import wraps
-
-from transfer_blend_shape.utils import decorator
 
 
 __all__ = [
@@ -28,28 +26,28 @@ class WaitCursor(object):
         app.restoreOverrideCursor()
 
 
-@decorator.memoize
 def get_application():
     """
-    Get the application making sure it is returned as a QtWidgets.QApplication
-    where the instance sometimes is returned as a QtWidgets.QCoreApplication,
-    which misses vital methods. At first it is attempted to create a new
-    application which is a bit backwards, but unfortunately nessecary due to
-    to fact that it crashes if checked when the instance is None.
+    Due to some strange bugs this turns out to be more complicated then it
+    should be. Sometimes we can't rely on the instance, sometimes the qApp
+    doesn't exist. This attempts to get it from a global variable first and
+    fall back on the instance. When a QCoreApplication is returned by either
+    the q_application or the instance it is cast into a QApplication object.
 
     :return: Application
     :rtype: QtWidgets.QApplication
     """
-    try:
-        app = QtWidgets.QApplication()
-    except (TypeError, RuntimeError):
+    if hasattr(QtWidgets, "q_application"):
+        app = QtWidgets.q_application
+    else:
         app = QtWidgets.QApplication.instance()
 
     if not isinstance(app, QtWidgets.QApplication):
         app_pointer = shiboken2.getCppPointer(app)[0]
-        return shiboken2.wrapInstance(app_pointer, QtWidgets.QApplication)
-    else:
-        return app
+        app = shiboken2.wrapInstance(app_pointer, QtWidgets.QApplication)
+        QtWidgets.q_application = app
+
+    return app
 
 
 def display_error(func):
