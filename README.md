@@ -1,7 +1,7 @@
 # maya-transfer-blend-shape
 Retarget your blend shapes between meshes with the same topology.
 
-<p align="center"><img src="docs/_images/transfer-blend-shape-ui.png?raw=true"></p>
+<p align="center"><img src="docs/_images/transfer-blend-shape-workflow.png?raw=true"></p>
 
 ## Installation
 * Extract the content of the .rar file anywhere on disk.
@@ -15,7 +15,7 @@ transfer will only work if at least one vertex has no delta, these fixed
 vertices are used to transfer the solution to the correct position in object 
 space, the threshold can be increased to make sure vertices are linked.
 
-<p align="center"><img src="docs/_images/transfer-blend-shape-workflow.png?raw=true"></p>
+<p align="center"><img src="docs/_images/transfer-blend-shape-ui.png?raw=true"></p>
 
 When the target is set/changed either by initializing the Transfer object or
 via the UI the target matrix is calculated, this can be quite time consuming.
@@ -28,9 +28,6 @@ calculated using weights determined by area difference on a per-vertex basis.
 
 Colour sets can be created to visualize the deformed vertices and the 
 laplacian smoothing weights.
-
-Example images are generated using the MetaHuman exports for the source/target
-base and source jaw open shape. Target jaw open is generated using the tool.
 
 Command line:
 ```python
@@ -51,3 +48,7 @@ This tool requires *numpy* and *scipy* to be installed to your environment.
 Using linux or Maya 2022+ on windows this can be done via a simple pip 
 install. For older windows versions a custom version will have to be compiled 
 against the correct VS version. 
+
+Example images are generated using the [MetaHuman](https://www.unrealengine.com/en-US/digital-humans) 
+exports for the source/target base and source jaw open shape. Target jaw open 
+is generated using the tool.

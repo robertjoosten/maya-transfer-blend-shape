@@ -47,7 +47,7 @@
 <span id="transfer-blend-shape-package"></span><h1>transfer_blend_shape package<a class="headerlink" href="#module-transfer_blend_shape" title="Permalink to this headline">¶</a></h1>
 <p>Transfer your blend shapes between meshes with the same topology.</p>
 <div class="figure align-center">
-<img alt="_images/transfer-blend-shape-ui.png" src="_images/transfer-blend-shape-ui.png" />
+<img alt="_images/transfer-blend-shape-workflow.png" src="_images/transfer-blend-shape-workflow.png" />
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -65,7 +65,7 @@ transfer will only work if at least one vertex has no delta, these fixed
 vertices are used to transfer the solution to the correct position in object
 space, the threshold can be increased to make sure vertices are linked.</p>
 <div class="figure align-center">
-<img alt="_images/transfer-blend-shape-workflow.png" src="_images/transfer-blend-shape-workflow.png" />
+<img alt="_images/transfer-blend-shape-ui.png" src="_images/transfer-blend-shape-ui.png" />
 </div>
 <p>When the target is set/changed either by initializing the Transfer object or
 via the UI the target matrix is calculated, this can be quite time consuming.</p>
@@ -77,8 +77,6 @@ matrix is applied to the deformed vertices. This smoothing matrix is
 calculated using weights determined by area difference on a per-vertex basis.</p>
 <p>Colour sets can be created to visualize the deformed vertices and the
 laplacian smoothing weights.</p>
-<p>Example images are generated using the MetaHuman exports for the source/target
-base and source jaw open shape. Target jaw open is generated using the tool.</p>
 <p>Command line</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transfer_blend_shape</span>
 <span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
@@ -98,6 +96,9 @@ base and source jaw open shape. Target jaw open is generated using the tool.</p>
 Using linux or Maya 2022+ on windows this can be done via a simple pip
 install. For older windows versions a custom version will have to be compiled
 against the correct VS version.</p>
+<p>Example images are generated using the <a class="reference external" href="https://www.unrealengine.com/en-US/digital-humans">MetaHuman</a>
+exports for the source/target base and source jaw open shape. Target jaw open
+is generated using the tool.</p>
 </div>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
