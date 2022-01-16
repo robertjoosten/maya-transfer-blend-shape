@@ -4,6 +4,7 @@ Transfer your blend shapes between meshes with the same topology.
 .. figure:: /_images/transfer-blend-shape-ui.png
    :align: center
 
+
 Installation
 ============
 * Extract the content of the .rar file anywhere on disk.
@@ -18,8 +19,14 @@ transfer will only work if at least one vertex has no delta, these fixed
 vertices are used to transfer the solution to the correct position in object
 space, the threshold can be increased to make sure vertices are linked.
 
+.. figure:: /_images/transfer-blend-shape-workflow.png
+   :align: center
+
 When the target is set/changed either by initializing the Transfer object or
 via the UI the target matrix is calculated, this can be quite time consuming.
+
+.. figure:: /_images/transfer-blend-shape-debug.png
+   :align: center
 
 The number of iterations determine the amount of times the laplacian smoothing
 matrix is applied to the deformed vertices. This smoothing matrix is
@@ -27,6 +34,9 @@ calculated using weights determined by area difference on a per-vertex basis.
 
 Colour sets can be created to visualize the deformed vertices and the
 laplacian smoothing weights.
+
+Example images are generated using the MetaHuman exports for the source/target
+base and source jaw open shape. Target jaw open is generated using the tool.
 
 Command line
 ::
