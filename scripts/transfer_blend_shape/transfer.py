@@ -274,7 +274,7 @@ class Transfer(object):
         """
         vertex_area = numpy.zeros(shape=(len(points),))
         triangle_points = numpy.take(points, self.triangle_indices, axis=0)
-        triangle_points = triangle_points.reshape((len(triangle_points) / 3, 3, 3))
+        triangle_points = triangle_points.reshape((len(triangle_points) // 3, 3, 3))
 
         length = triangle_points - triangle_points[:, [1, 2, 0], :]
         length = scipy.linalg.norm(length, axis=2)
