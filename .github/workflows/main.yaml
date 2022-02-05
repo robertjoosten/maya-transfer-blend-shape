@@ -30,7 +30,12 @@ jobs:
   steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Environment
+      run: |
+        wget https://bootstrap.pypa.io/pip/${{ matrix.pip }}
+        mayapy get-pip.py --user
+        mayapy -m pip install --user numpy scipy
     - name: Tests
       run: |
-      export PYTHONPATH=$(pwd)/scripts
-      mayapy ./tests/bin/run.py
+        export PYTHONPATH=$(pwd)/scripts
+        mayapy ./tests/bin/run.py
