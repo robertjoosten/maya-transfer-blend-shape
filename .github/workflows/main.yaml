@@ -8,34 +8,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  maya-linux:
+  maya:
     runs-on: ubuntu-latest
-  strategy:
-    fail-fast: false
-    matrix:
-      include:
-        - image: "2017"
-          pip: "2.7/get-pip.py"
-        - image: "2018"
-          pip: "2.7/get-pip.py"
-        - image: "2019"
-          pip: "2.7/get-pip.py"
-        - image: "2020"
-          pip: "2.7/get-pip.py"
-        - image: "2022"
-          pip: "get-pip.py"
 
-  container: mottosso/maya:${{ matrix.image }}
+    strategy:
+      fail-fast: false
 
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Environment
-      run: |
-        wget https://bootstrap.pypa.io/pip/${{ matrix.pip }}
-        mayapy get-pip.py --user
-        mayapy -m pip install --user numpy scipy
-    - name: Tests
-      run: |
-        export PYTHONPATH=$(pwd)/scripts
-        mayapy ./tests/bin/run.py
+      matrix:
+       include:
+         - maya: "2017"
+           pip: "2.7/get-pip.py"
+         - maya: "2018"
+           pip: "2.7/get-pip.py"
+         - maya: "2019"
+           pip: "2.7/get-pip.py"
+         - maya: "2020"
+           pip: "2.7/get-pip.py"
+         - maya: "2022"
+           pip: "get-pip.py"
+
+    container: mottosso/maya:${{ matrix.maya }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Environment
+        run: |
+          wget https://bootstrap.pypa.io/pip/${{ matrix.pip }}
+          mayapy get-pip.py --user
+          mayapy -m pip install --user numpy scipy
+
+      - name: Testing
+        run: |
+          export PYTHONPATH=$(pwd)/scripts
+          mayapy ./tests/bin/run.py
