@@ -13,8 +13,9 @@ class TransferTestCase(TestCase):
     """
 
     def setUp(self):
-        file_path = os.path.join(os.path.dirname(__file__), "bin", "scene.ma")
-        cmds.file(file_path, open=True, force=True, prompt=False, ignoreVersion=True)
+        cmds.loadPlugin("fbxmaya", quiet=True)
+        file_path = os.path.join(os.path.dirname(__file__), "bin", "scene.fbx")
+        cmds.file(file_path, i=True, force=True, prompt=False, ignoreVersion=True)
 
     def tearDown(self):
         cmds.file(newFile=True, force=True)
@@ -42,8 +43,11 @@ class TransferTestCase(TestCase):
         Execute the transfer from the attached blend shape on the source mesh
         and validate the name of the created target mesh.
         """
+        cmds.blendShape("jawOpen_MESH", "source_MESH")
+        cmds.delete("jawOpen_MESH")
+
         t = transfer.Transfer("source_MESH", "target_MESH")
         self.assertTrue(t.is_valid_with_blend_shape())
 
         meshes = t.execute_from_blend_shape()
-        self.assertIn("jawOpen", meshes)
+        self.assertIn("jawOpen_MESH", meshes)
