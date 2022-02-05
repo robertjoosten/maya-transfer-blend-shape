@@ -1,0 +1,36 @@
+name: maya-unit-testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  maya-linux:
+    runs-on: ubuntu-latest
+  strategy:
+    fail-fast: false
+    matrix:
+      include:
+        - maya: "2017"
+          pip: "2.7/get-pip.py"
+        - maya: "2018"
+          pip: "2.7/get-pip.py"
+        - maya: "2019"
+          pip: "2.7/get-pip.py"
+        - maya: "2020"
+          pip: "2.7/get-pip.py"
+        - maya: "2022"
+          pip: "get-pip.py"
+
+  container: mottosso/maya:${{ matrix.maya }}
+
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Tests
+      run: |
+      export PYTHONPATH=$(pwd)/scripts
+      mayapy ./tests/bin/run.py
