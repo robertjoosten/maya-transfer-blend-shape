@@ -14,7 +14,7 @@ class TransferTestCase(TestCase):
 
     def setUp(self):
         file_path = os.path.join(os.path.dirname(__file__), "bin", "scene.ma")
-        cmds.file(file_path, open=True, force=True, prompt=False)
+        cmds.file(file_path, open=True, force=True, prompt=False, ignoreVersion=True)
 
     def tearDown(self):
         cmds.file(newFile=True, force=True)

@@ -1,21 +1,23 @@
 //Maya ASCII 2018 scene
 //Name: scene.ma
-//Last modified: Sat, Feb 05, 2022 12:51:53 PM
+//Last modified: Sat, Feb 05, 2022 01:41:15 PM
 //Codeset: 1252
-requires maya "2017";
+requires maya "2018";
 requires "stereoCamera" "10.0";
 currentUnit -l centimeter -a degree -t film;
 fileInfo "application" "maya";
+fileInfo "product" "Maya 2018";
+fileInfo "version" "2018";
 createNode transform -s -n "persp";
 	rename -uid "C52EB3E4-4E22-04AB-8701-EBBB1BDC156B";
 	setAttr ".v" no;
-	setAttr ".t" -type "double3" 2.1959194608937143 -1.1002031392895291 56.655231456564223 ;
+	setAttr ".t" -type "double3" 2.2373438798554846 -1.1096036948478349 57.278906022475361 ;
 	setAttr ".r" -type "double3" 0.86164727039613531 3.7999999999992093 0 ;
 createNode camera -s -n "perspShape" -p "persp";
 	rename -uid "E8CC4F53-4B08-8630-3ECD-6CA1FE1072B2";
 	setAttr -k off ".v" no;
 	setAttr ".fl" 34.999999999999993;
-	setAttr ".coi" 54.073430527827384;
+	setAttr ".coi" 54.698549970090703;
 	setAttr ".imn" -type "string" "persp";
 	setAttr ".den" -type "string" "persp_depth";
 	setAttr ".man" -type "string" "persp_mask";
