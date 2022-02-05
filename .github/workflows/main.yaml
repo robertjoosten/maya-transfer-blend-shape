@@ -26,7 +26,7 @@ jobs:
           pip: "get-pip.py"
 
   container: mottosso/maya:${{ matrix.maya }}
-
+  
   steps:
     - name: Checkout
       uses: actions/checkout@v2
