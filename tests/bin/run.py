@@ -11,7 +11,7 @@ def main():
     result = test_runner.run(test_suite)
 
     maya.standalone.uninitialize()
-    sys.exit(int(not result.wasSuccessful()))
+    sys.exit(not result.wasSuccessful())
 
 
 if __name__ == "__main__":
