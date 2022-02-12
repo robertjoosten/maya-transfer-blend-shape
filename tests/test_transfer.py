@@ -1,24 +1,25 @@
 import os
+import logging
 from maya import cmds
-from unittest import TestCase
+from mayaunittest import MayaTestCase
 
 from transfer_blend_shape import transfer
 
 
-class TransferTestCase(TestCase):
+class TestTransfer(MayaTestCase):
     """
     The transfer test case load the saved example scenes and simply runs the
     blend shape conversion node. Linked with CI on github it will provide a
     test case for all supported Maya versions.
     """
+    file_new = MayaTestCase.FILE_NEW_ALWAYS
+    logging_level = logging.CRITICAL
 
     def setUp(self):
-        cmds.loadPlugin("fbxmaya", quiet=True)
+        super(TestTransfer, self).setUp()
+        self.load_plugin("fbxmaya")
         file_path = os.path.join(os.path.dirname(__file__), "bin", "scene.fbx")
         cmds.file(file_path, i=True, force=True, prompt=False, ignoreVersion=True)
-
-    def tearDown(self):
-        cmds.file(newFile=True, force=True)
 
     # ------------------------------------------------------------------------
 
