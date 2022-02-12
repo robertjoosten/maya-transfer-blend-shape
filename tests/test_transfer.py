@@ -17,6 +17,7 @@ class TestTransfer(MayaTestCase):
 
     def setUp(self):
         super(TestTransfer, self).setUp()
+
         self.load_plugin("fbxmaya")
         file_path = os.path.join(os.path.dirname(__file__), "bin", "scene.fbx")
         cmds.file(file_path, i=True, force=True, prompt=False, ignoreVersion=True)
