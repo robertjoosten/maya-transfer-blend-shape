@@ -67,8 +67,9 @@ space, the threshold can be increased to make sure vertices are linked.</p>
 <div class="figure align-center">
 <img alt="_images/transfer-blend-shape-ui.png" src="_images/transfer-blend-shape-ui.png" />
 </div>
-<p>When the target is set/changed either by initializing the Transfer object or
-via the UI the target matrix is calculated, this can be quite time consuming.</p>
+<p>A virtual mesh can be used to add additional triangles to the solve, it is
+important that all vertices of the virtual mesh can be mapped to vertices on
+the source mesh, this can be done by snapping them.</p>
 <div class="figure align-center">
 <img alt="_images/transfer-blend-shape-debug.png" src="_images/transfer-blend-shape-debug.png" />
 </div>
@@ -79,7 +80,7 @@ calculated using weights determined by area difference on a per-vertex basis.</p
 laplacian smoothing weights.</p>
 <p>Command line</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">transfer_blend_shape</span>
-<span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">transfer</span> <span class="o">=</span> <span class="n">transfer_blend_shape</span><span class="o">.</span><span class="n">Transfer</span><span class="p">(</span><span class="n">source_mesh</span><span class="p">,</span> <span class="n">target_mesh</span><span class="p">,</span> <span class="n">virtual_mesh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 <span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 <span class="n">transfer</span><span class="o">.</span><span class="n">execute_from_blend_shape</span><span class="p">()</span>
 </pre></div>

@@ -8,11 +8,11 @@ from maya import cmds
 from maya.api import OpenMaya
 
 from transfer_blend_shape.utils import api
-from transfer_blend_shape.utils import naming
 from transfer_blend_shape.utils import colour
 from transfer_blend_shape.utils import conversion
+from transfer_blend_shape.utils import decorator
+from transfer_blend_shape.utils import naming
 from transfer_blend_shape.utils.deform import blend_shape
-
 
 log = logging.getLogger(__name__)
 
@@ -20,39 +20,29 @@ log = logging.getLogger(__name__)
 class Transfer(object):
     """
     Deformation transfer applies the deformation exhibited by a source mesh
-    onto a different target mesh.
+    onto a different target mesh. The transfer can be aided by a virtual
+    mesh that creates additional triangles.
     """
+
     def __init__(
             self,
-            source=None,
-            target=None,
+            source_mesh=None,
+            target_mesh=None,
+            virtual_mesh=None,
             iterations=3,
             threshold=0.001,
             create_colour_sets=False
     ):
-        # variables
-        self._source = None
-        self._source_fn = OpenMaya.MFnMesh()
-        self._source_area = numpy.empty(shape=0)
-        self._source_points = numpy.empty(shape=0)
-
-        self._target = None
-        self._target_fn = OpenMaya.MFnMesh()
-        self._target_points = numpy.empty(shape=0)
-
-        self.triangle_indices = OpenMaya.MIntArray()
-        self.connectivity_indices = []
-        self.target_matrix = numpy.empty(shape=0)
-
-        if source is not None:
-            self.set_source(source)
-        if target is not None:
-            self.set_target(target)
-
+        self._source_mesh = None
+        self._target_mesh = None
+        self._virtual_mesh = None
         self._threshold = 0.001
         self._iterations = 3
         self._create_colour_sets = False
 
+        self.set_source_mesh(source_mesh)
+        self.set_virtual_mesh(virtual_mesh)
+        self.set_target_mesh(target_mesh)
         self.set_iterations(iterations)
         self.set_threshold(threshold)
         self.set_create_colour_sets(create_colour_sets)
@@ -60,123 +50,175 @@ class Transfer(object):
     # ------------------------------------------------------------------------
 
     @property
-    def source(self):
+    def source_mesh(self):
         """
-        :return: Source
+        :return: Source mesh
         :rtype: str
         """
-        return self._source
+        return self._source_mesh
 
-    @property
-    def source_fn(self):
-        """
-        :return: Source fn
-        :rtype: OpenMaya.MFnMesh
-        """
-        return self._source_fn
-
-    @property
-    def source_points(self):
+    @decorator.memoize
+    def get_source_points(self):
         """
         :return: Source points
         :rtype: numpy.Array
+        :raise RuntimeError: When source is not defined.
         """
-        return self._source_points
+        if self.source_mesh is None:
+            raise RuntimeError("Source mesh has not been defined, unable to query points.")
 
-    @property
-    def source_area(self):
+        mesh_fn = api.conversion.get_mesh_fn(self.source_mesh)
+        return numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
+
+    @decorator.memoize
+    def get_source_triangles(self):
         """
-        :return: Source area
+        :return: Source triangles
+        :rtype: list[int]
+        :raise RuntimeError: When source is not defined.
+        """
+        if self.source_mesh is None:
+            raise RuntimeError("Source mesh has not been defined, unable to query triangle indices.")
+
+        mesh_fn = api.conversion.get_mesh_fn(self.source_mesh)
+        _, triangles = mesh_fn.getTriangles()
+        return list(triangles)
+
+    @decorator.memoize
+    def get_source_area(self):
+        """
+        :return: Source triangle area
         :rtype: numpy.Array
+        :raise RuntimeError: When source is not defined.
         """
-        return self._source_area
+        if self.source_mesh is None:
+            raise RuntimeError("Source mesh has not been defined, unable to query area.")
 
-    def set_source(self, source):
+        source_points = self.get_source_points()
+        return self.calculate_area(source_points)
+
+    def set_source_mesh(self, source_mesh):
         """
-        :param str source:
-        :raise RuntimeError: When source is not a mesh.
-        :raise RuntimeError: When source vertex count doesn't match target.
+        :param str source_mesh:
         """
-        name = naming.get_name(source)
-        dag = api.conversion.get_dag(source)
-        dag.extendToShape()
-
-        if not dag.hasFn(OpenMaya.MFn.kMesh):
-
-            raise RuntimeError("Source '{}' is not a mesh.".format(name))
-
-        mesh_fn = OpenMaya.MFnMesh(dag)
-        if self.target and mesh_fn.numVertices != self.target_fn.numVertices:
-            raise RuntimeError("Unable to set source '{}', doesn't match target vertex count.".format(name))
-
-        self._source = source
-        self._source_fn = mesh_fn
-
-        if not bool(self.triangle_indices):
-            _, self.triangle_indices = mesh_fn.getTriangles()
-
-        self._source_points = numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
-        self._source_area = self.calculate_area(self._source_points)
+        self._source_mesh = source_mesh
+        self.get_source_points.clear()
+        self.get_source_triangles.clear()
+        self.get_source_area.clear()
+        self.get_virtual_triangles.clear()
 
     # ------------------------------------------------------------------------
 
     @property
-    def target(self):
+    def target_mesh(self):
         """
-        :return: Target
+        :return: Target mesh
         :rtype: str
         """
-        return self._target
+        return self._target_mesh
 
-    @property
-    def target_fn(self):
-        """
-        :return: Target fn
-        :rtype: OpenMaya.MFnMesh
-        """
-        return self._target_fn
-
-    @property
-    def target_points(self):
+    @decorator.memoize
+    def get_target_points(self):
         """
         :return: Target points
         :rtype: numpy.Array
+        :raise RuntimeError: When target is not defined.
         """
-        return self._target_points
+        if self.target_mesh is None:
+            raise RuntimeError("Target mesh has not been defined, unable to query points.")
 
-    def set_target(self, target):
+        mesh_fn = api.conversion.get_mesh_fn(self.target_mesh)
+        return numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
+
+    @decorator.memoize
+    def get_target_connectivity(self):
         """
-        :param str target:
-        :raise RuntimeError: When source is not a mesh.
-        :raise RuntimeError: When source vertex count doesn't match target.
+        :return: Target connectivity
+        :rtype: list[list[int]]
+        :raise RuntimeError: When target is not defined.
         """
-        name = naming.get_name(target)
-        dag = api.conversion.get_dag(target)
-        dag.extendToShape()
+        if self.target_mesh is None:
+            raise RuntimeError("Target mesh has not been defined, unable to query connectivity.")
 
-        if not dag.hasFn(OpenMaya.MFn.kMesh):
-            raise RuntimeError("Target '{}' is not a mesh.".format(name))
-
-        mesh_fn = OpenMaya.MFnMesh(dag)
-        mesh_iter = OpenMaya.MItMeshVertex(dag)
-        if self.source and mesh_fn.numVertices != self.source_fn.numVertices:
-            raise RuntimeError("Unable to set target '{}', doesn't match source vertex count.".format(name))
-
-        self._target = target
-        self._target_fn = mesh_fn
-
-        if not bool(self.triangle_indices):
-            _, self.triangle_indices = mesh_fn.getTriangles()
-
-        self.connectivity_indices = []
+        connectivity = []
+        mesh_dag = api.conversion.get_dag(self.target_mesh)
+        mesh_iter = OpenMaya.MItMeshVertex(mesh_dag)
 
         while not mesh_iter.isDone():
             indices = list(mesh_iter.getConnectedVertices())
-            self.connectivity_indices.append(indices)
+            connectivity.append(indices)
             mesh_iter.next()
 
-        self._target_points = numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
-        self.target_matrix = self.calculate_target_matrix()
+        return connectivity
+
+    @decorator.memoize
+    def get_target_matrix(self):
+        """
+        :return: Target matrix
+        :rtype: numpy.Array
+        :raise RuntimeError: When target is not defined.
+        """
+        if self.target_mesh is None:
+            raise RuntimeError("Target mesh has not been defined, unable to query matrix.")
+
+        return self.calculate_target_matrix()
+
+    def set_target_mesh(self, target_mesh):
+        """
+        :param str target_mesh:
+        """
+        self._target_mesh = target_mesh
+        self.get_target_points.clear()
+        self.get_target_connectivity.clear()
+        self.get_target_matrix.clear()
+
+    # ------------------------------------------------------------------------
+
+    @property
+    def virtual_mesh(self):
+        """
+        :return: Virtual
+        :rtype: str
+        """
+        return self._virtual_mesh
+
+    @decorator.memoize
+    def get_virtual_triangles(self, threshold=0.001):
+        """
+        :param float threshold:
+        :return: Virtual triangles
+        :rtype: list[int]
+        :raise RuntimeError: When minimum length surpasses threshold.
+        """
+        if self.virtual_mesh is None:
+            return []
+
+        idx = {}
+        mesh_fn = api.conversion.get_mesh_fn(self.virtual_mesh)
+
+        source_points = self.get_source_points()
+        virtual_points = numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
+        _, virtual_triangles = mesh_fn.getTriangles()
+
+        for i, point in enumerate(virtual_points):
+            lengths = scipy.linalg.norm(source_points - point, axis=1)
+            index = lengths.argmin()
+
+            if lengths[index] > threshold:
+                raise RuntimeError("Unable to map vertex {} if the virtual mesh "
+                                   "to the source mesh.".format(index))
+
+            idx[i] = index
+
+        return [idx[vertex] for vertex in virtual_triangles]
+
+    def set_virtual_mesh(self, virtual_mesh):
+        """
+        :param str virtual_mesh:
+        """
+        self._virtual_mesh = virtual_mesh
+        self.get_target_matrix.clear()
+        self.get_virtual_triangles.clear()
 
     # ------------------------------------------------------------------------
 
@@ -246,14 +288,20 @@ class Transfer(object):
         :return: Valid state
         :rtype: bool
         """
-        return bool(self.source and self.target)
+        is_source_valid = self.source_mesh and cmds.objExists(self.source_mesh)
+        is_target_valid = self.target_mesh and cmds.objExists(self.target_mesh)
+        is_virtual_valid = not self.virtual_mesh or cmds.objExists(self.virtual_mesh)
+        return bool(is_source_valid and is_target_valid and is_virtual_valid)
 
     def is_valid_with_blend_shape(self):
         """
         :return: Valid state + blend shape
         :rtype: bool
         """
-        return bool(blend_shape.get_blend_shape(self.source)) if self.is_valid() else False
+        if not self.is_valid():
+            return False
+
+        return bool(blend_shape.get_blend_shape(self.source_mesh))
 
     # ------------------------------------------------------------------------
 
@@ -263,7 +311,8 @@ class Transfer(object):
         :return: Static/Dynamic vertices
         :rtype: numpy.Array, numpy.Array
         """
-        lengths = scipy.linalg.norm(self.source_points - points, axis=1)
+        source_points = self.get_source_points()
+        lengths = scipy.linalg.norm(source_points - points, axis=1)
         return numpy.nonzero(lengths <= self.threshold)[0], numpy.nonzero(lengths > self.threshold)[0]
 
     def calculate_area(self, points):
@@ -273,7 +322,8 @@ class Transfer(object):
         :rtype: numpy.Array
         """
         vertex_area = numpy.zeros(shape=(len(points),))
-        triangle_points = numpy.take(points, self.triangle_indices, axis=0)
+        source_triangles = self.get_source_triangles()
+        triangle_points = numpy.take(points, source_triangles, axis=0)
         triangle_points = triangle_points.reshape((len(triangle_points) // 3, 3, 3))
 
         length = triangle_points - triangle_points[:, [1, 2, 0], :]
@@ -282,7 +332,7 @@ class Transfer(object):
         s = numpy.sum(length, axis=1) / 2.0
         areas = numpy.sqrt(s * (s - length[:, 0]) * (s - length[:, 1]) * (s - length[:, 2]))
 
-        for indices, area in zip(conversion.as_chunks(self.triangle_indices, 3), areas):
+        for indices, area in zip(conversion.as_chunks(source_triangles, 3), areas):
             for index in indices:
                 vertex_area[index] += area
 
@@ -307,10 +357,13 @@ class Transfer(object):
         :return: Target matrix
         :rtype: numpy.Array
         """
-        matrix = numpy.zeros((len(self.triangle_indices), self.target_fn.numVertices))
-        for i, (i0, i1, i2) in enumerate(conversion.as_chunks(self.triangle_indices, 3)):
-            e0 = self.target_points[i1] - self.target_points[i0]
-            e1 = self.target_points[i2] - self.target_points[i0]
+        triangles = self.get_source_triangles() + self.get_virtual_triangles()
+        target_points = self.get_target_points()
+
+        matrix = numpy.zeros((len(triangles), target_points.shape[0]))
+        for i, (i0, i1, i2) in enumerate(conversion.as_chunks(triangles, 3)):
+            e0 = target_points[i1] - target_points[i0]
+            e1 = target_points[i2] - target_points[i0]
             va = numpy.array([e0, e1]).transpose()
 
             q, r = numpy.linalg.qr(va)
@@ -329,9 +382,12 @@ class Transfer(object):
         :return: Deformation gradient
         :rtype: numpy.Array
         """
-        matrix = numpy.zeros((len(self.triangle_indices), 3))
-        for i, (i0, i1, i2) in enumerate(conversion.as_chunks(self.triangle_indices, 3)):
-            va = self.calculate_edge_matrix(self.source_points[i0], self.source_points[i1], self.source_points[i2])
+        triangles = self.get_source_triangles() + self.get_virtual_triangles()
+        source_points = self.get_source_points()
+
+        matrix = numpy.zeros((len(triangles), 3))
+        for i, (i0, i1, i2) in enumerate(conversion.as_chunks(triangles, 3)):
+            va = self.calculate_edge_matrix(source_points[i0], source_points[i1], source_points[i2])
             vb = self.calculate_edge_matrix(points[i0], points[i1], points[i2])
 
             q, r = numpy.linalg.qr(va)
@@ -355,8 +411,9 @@ class Transfer(object):
         :return: Laplacian weights
         :rtype: numpy.Array
         """
-        area = self.calculate_area(points)
-        weights = numpy.dstack((self.source_area, area))
+        source_area = self.get_source_area()
+        target_area = self.calculate_area(points)
+        weights = numpy.dstack((source_area, target_area))
         weights = numpy.max(weights.transpose(), axis=0) / numpy.min(weights.transpose(), axis=0) - 1
         smoothing_matrix = self.calculate_laplacian_matrix(numpy.ones(len(points)), ignore)
 
@@ -378,14 +435,15 @@ class Transfer(object):
         :return: Laplacian smoothing matrix
         :rtype: scipy.sparse.csr.csr_matrix
         """
-        # TODO: look into preserving mesh curvature
-        num = self.target_fn.numVertices
+        num = self.get_target_points().shape[0]
+        connectivity = self.get_target_connectivity()
+
         weights[ignore] = 0
         data, rows, columns = [], [], []
 
         for i, weight in enumerate(weights):
             weight = min([weights[i], 1])
-            indices = self.connectivity_indices[i]
+            indices = connectivity[i]
             z = len(indices)
             data += ([i] * (z + 1))
             rows += indices + [i]
@@ -402,39 +460,48 @@ class Transfer(object):
         :return: Target
         :rtype: str
         :raise RuntimeError: When transfer is invalid.
+        :raise RuntimeError: When vertex count doesn't match between source and target.
         :raise RuntimeError: When no static vertices are found.
         """
         t = time.time()
 
         if not self.is_valid():
-            raise RuntimeError("Invalid transfer, set source and target.")
+            raise RuntimeError("Invalid transfer, set at least source and target.")
+
+        source_points = self.get_source_points()
+        target_points = self.get_target_points()
+        if source_points.shape[0] != target_points.shape[0]:
+            raise RuntimeError("Vertex count between source mesh '{}' and target mesh '{}' "
+                               "do not match.".format(self.source_mesh, self.target_mesh))
 
         static_vertices, deformed_vertices = self.filter_vertices(points)
         if not len(static_vertices):
             raise RuntimeError("No static vertices found for target '{}', "
                                "try increasing the threshold".format(name))
         elif not len(deformed_vertices):
-            target = cmds.duplicate(self.target, name=name)[0]
+            target = cmds.duplicate(self.target_mesh, name=name)[0]
             log.info("Transferred '{}' as a static mesh.".format(name))
             return target
 
+        target_matrix = self.get_target_matrix()
+
         # calculate deformation gradient, the static vertices are used to
         # anchor the static vertices in place.
-        static_matrix = self.target_matrix[:, static_vertices]
-        static_points = self.target_points[static_vertices, :]
+        static_matrix = target_matrix[:, static_vertices]
+        static_points = target_points[static_vertices, :]
         static_gradient = numpy.dot(static_matrix, static_points)
         deformation_gradient = self.calculate_deformation_gradient(points) - static_gradient
 
         # isolate dynamic vertices and solve their position. As it is quicker
         # to set all points rather than individual ones the entire target
         # point list is constructed.
-        deformed_matrix = self.target_matrix[:, deformed_vertices]
+        deformed_matrix = target_matrix[:, deformed_vertices]
         deformed_matrix_transpose = deformed_matrix.transpose()
         lu, piv = scipy.linalg.lu_factor(numpy.dot(deformed_matrix_transpose, deformed_matrix))
         uts = numpy.dot(deformed_matrix_transpose, deformation_gradient)
         deformed_points = scipy.linalg.lu_solve((lu, piv), uts)
 
-        target_points = self.target_points.copy()
+        target_points = target_points.copy()
         target_points[deformed_vertices, :] = deformed_points
 
         # calculate the laplacian smoothing weights/matrix using the
@@ -448,7 +515,7 @@ class Transfer(object):
             target_points = target_points - diff
 
         # duplicate the original target and update its points
-        target = cmds.duplicate(self.target, name=name)[0]
+        target = cmds.duplicate(self.target_mesh, name=name)[0]
         target_dag = api.conversion.get_dag(target)
         target_dag.extendToShape()
         target_fn = OpenMaya.MFnMesh(target_dag)
@@ -474,6 +541,7 @@ class Transfer(object):
         :return: Target
         :rtype: str
         :raise RuntimeError: When transfer is invalid.
+        :raise RuntimeError: When vertex count doesn't match between source and target.
         :raise RuntimeError: When provided mesh is not a mesh.
         :raise RuntimeError: When mesh vertex count doesn't match source.
         :raise RuntimeError: When no static vertices are found.
@@ -482,15 +550,7 @@ class Transfer(object):
             raise RuntimeError("Invalid transfer, set source and target.")
 
         mesh_name = naming.get_leaf_name(mesh)
-        mesh_dag = api.conversion.get_dag(mesh)
-        mesh_dag.extendToShape()
-        if not mesh_dag.hasFn(OpenMaya.MFn.kMesh):
-            raise RuntimeError("Mesh '{}' is not a mesh.".format(mesh_name))
-
-        mesh_fn = OpenMaya.MFnMesh(mesh_dag)
-        if self.source_fn.numVertices != mesh_fn.numVertices:
-            raise RuntimeError("Mesh '{}' vertex count doesn't match with source.".format(mesh_name))
-
+        mesh_fn = api.conversion.get_mesh_fn(mesh)
         name = name if name is not None else "{}_TGT".format(mesh_name)
         points = numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
         return self.execute(points, name)
@@ -500,13 +560,16 @@ class Transfer(object):
         :return: Targets
         :rtype: list[str]
         :raise RuntimeError: When transfer is invalid.
+        :raise RuntimeError: When vertex count doesn't match between source and target.
         :raise RuntimeError: When no blend shape is connected to the source.
         :raise RuntimeError: When no static vertices are found.
         """
         if not self.is_valid_with_blend_shape():
-            raise RuntimeError("Invalid transfer, set source with blend shape and target.")
+            raise RuntimeError("Invalid transfer, set at least source with blend shape and target.")
 
-        bs = blend_shape.get_blend_shape(self.source)
+        bs = blend_shape.get_blend_shape(self.source_mesh)
+        mesh_fn = api.conversion.get_mesh_fn(self.source_mesh)
+
         cmds.setAttr("{}.envelope".format(bs), 1)
         for name in blend_shape.get_blend_shape_targets(bs):
             cmds.setAttr("{}.{}".format(bs, name), 0)
@@ -514,7 +577,7 @@ class Transfer(object):
         targets = []
         for name in blend_shape.get_blend_shape_targets(bs):
             cmds.setAttr("{}.{}".format(bs, name), 1)
-            points = numpy.array(self.source_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
+            points = numpy.array(mesh_fn.getPoints(OpenMaya.MSpace.kObject))[:, :-1]
             cmds.setAttr("{}.{}".format(bs, name), 0)
 
             target = self.execute(points, name)

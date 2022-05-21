@@ -40,6 +40,18 @@ class TestTransfer(MayaTestCase):
         self.assertIn("deformed", mesh_colour_sets)
         self.assertIn("weights", mesh_colour_sets)
 
+    def test_execute_from_mesh_with_virtual(self):
+        """
+        Execute the transfer from a provided mesh and validate the name of the
+        created target mesh. The virtual mesh is used and added to the solve.
+        """
+        t = transfer.Transfer("source_MESH", "target_MESH", "virtual_MESH")
+        t.set_create_colour_sets(True)
+        self.assertTrue(t.is_valid())
+
+        mesh = t.execute_from_mesh("jawOpen_MESH", name="jawOpen")
+        self.assertEqual(mesh, "jawOpen")
+
     def test_execute_from_blend_shape(self):
         """
         Execute the transfer from the attached blend shape on the source mesh
@@ -53,3 +65,4 @@ class TestTransfer(MayaTestCase):
 
         meshes = t.execute_from_blend_shape()
         self.assertIn("jawOpen_MESH", meshes)
+

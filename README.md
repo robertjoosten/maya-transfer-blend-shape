@@ -17,8 +17,9 @@ space, the threshold can be increased to make sure vertices are linked.
 
 <p align="center"><img src="docs/_images/transfer-blend-shape-ui.png?raw=true"></p>
 
-When the target is set/changed either by initializing the Transfer object or
-via the UI the target matrix is calculated, this can be quite time consuming.
+A virtual mesh can be used to add additional triangles to the solve, it is 
+important that all vertices of the virtual mesh can be mapped to vertices on
+the source mesh, this can be done by snapping them.
 
 <p align="center"><img src="docs/_images/transfer-blend-shape-debug.png?raw=true"></p>
 
@@ -32,7 +33,7 @@ laplacian smoothing weights.
 Command line:
 ```python
 import transfer_blend_shape
-transfer = transfer_blend_shape.Transfer(source, target, iterations=3, threshold=0.001)
+transfer = transfer_blend_shape.Transfer(source_mesh, target_mesh, virtual_mesh=None, iterations=3, threshold=0.001)
 transfer.execute_from_mesh(mesh, name)
 transfer.execute_from_blend_shape()
 ```

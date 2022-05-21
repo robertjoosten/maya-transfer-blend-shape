@@ -47,10 +47,11 @@
 <span id="transfer-blend-shape-transfer-module"></span><h1>transfer_blend_shape.transfer module<a class="headerlink" href="#module-transfer_blend_shape.transfer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="transfer_blend_shape.transfer.Transfer">
-<em class="property">class </em><code class="descclassname">transfer_blend_shape.transfer.</code><code class="descname">Transfer</code><span class="sig-paren">(</span><em>source=None</em>, <em>target=None</em>, <em>iterations=3</em>, <em>threshold=0.001</em>, <em>create_colour_sets=False</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">transfer_blend_shape.transfer.</code><code class="descname">Transfer</code><span class="sig-paren">(</span><em>source_mesh=None</em>, <em>target_mesh=None</em>, <em>virtual_mesh=None</em>, <em>iterations=3</em>, <em>threshold=0.001</em>, <em>create_colour_sets=False</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Deformation transfer applies the deformation exhibited by a source mesh
-onto a different target mesh.</p>
+onto a different target mesh. The transfer can be aided by a virtual
+mesh that creates additional triangles.</p>
 <dl class="method">
 <dt id="transfer_blend_shape.transfer.Transfer.calculate_area">
 <code class="descname">calculate_area</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.calculate_area" title="Permalink to this definition">¶</a></dt>
@@ -214,6 +215,7 @@ out the smooth.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><strong>RuntimeError</strong> – When transfer is invalid.</li>
+<li><strong>RuntimeError</strong> – When vertex count doesn’t match between source and target.</li>
 <li><strong>RuntimeError</strong> – When no static vertices are found.</li>
 </ul>
 </td>
@@ -237,6 +239,7 @@ out the smooth.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><strong>RuntimeError</strong> – When transfer is invalid.</li>
+<li><strong>RuntimeError</strong> – When vertex count doesn’t match between source and target.</li>
 <li><strong>RuntimeError</strong> – When no blend shape is connected to the source.</li>
 <li><strong>RuntimeError</strong> – When no static vertices are found.</li>
 </ul>
@@ -267,6 +270,7 @@ out the smooth.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><strong>RuntimeError</strong> – When transfer is invalid.</li>
+<li><strong>RuntimeError</strong> – When vertex count doesn’t match between source and target.</li>
 <li><strong>RuntimeError</strong> – When provided mesh is not a mesh.</li>
 <li><strong>RuntimeError</strong> – When mesh vertex count doesn’t match source.</li>
 <li><strong>RuntimeError</strong> – When no static vertices are found.</li>
@@ -289,6 +293,127 @@ out the smooth.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Static/Dynamic vertices</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array, numpy.Array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.get_source_area">
+<code class="descname">get_source_area</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_source_area" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source triangle area</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – When source is not defined.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.get_source_points">
+<code class="descname">get_source_points</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_source_points" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source points</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – When source is not defined.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.get_source_triangles">
+<code class="descname">get_source_triangles</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_source_triangles" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source triangles</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[int]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – When source is not defined.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.get_target_connectivity">
+<code class="descname">get_target_connectivity</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_target_connectivity" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target connectivity</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list[list[int]]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – When target is not defined.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.get_target_matrix">
+<code class="descname">get_target_matrix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_target_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – When target is not defined.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.get_target_points">
+<code class="descname">get_target_points</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_target_points" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target points</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – When target is not defined.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.get_virtual_triangles">
+<code class="descname">get_virtual_triangles</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.get_virtual_triangles" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>threshold</strong> (<em>float</em>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Virtual triangles</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list[int]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – When minimum length surpasses threshold.</td>
 </tr>
 </tbody>
 </table>
@@ -373,40 +498,26 @@ out the smooth.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="transfer_blend_shape.transfer.Transfer.set_source">
-<code class="descname">set_source</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_source" title="Permalink to this definition">¶</a></dt>
+<dt id="transfer_blend_shape.transfer.Transfer.set_source_mesh">
+<code class="descname">set_source_mesh</code><span class="sig-paren">(</span><em>source_mesh</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_source_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>source</strong> (<em>str</em>) – </p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>RuntimeError</strong> – When source is not a mesh.</li>
-<li><strong>RuntimeError</strong> – When source vertex count doesn’t match target.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source_mesh</strong> (<em>str</em>) – </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="transfer_blend_shape.transfer.Transfer.set_target">
-<code class="descname">set_target</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_target" title="Permalink to this definition">¶</a></dt>
+<dt id="transfer_blend_shape.transfer.Transfer.set_target_mesh">
+<code class="descname">set_target_mesh</code><span class="sig-paren">(</span><em>target_mesh</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_target_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>target</strong> (<em>str</em>) – </p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>RuntimeError</strong> – When source is not a mesh.</li>
-<li><strong>RuntimeError</strong> – When source vertex count doesn’t match target.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target_mesh</strong> (<em>str</em>) – </td>
 </tr>
 </tbody>
 </table>
@@ -432,14 +543,27 @@ out the smooth.</p>
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="transfer_blend_shape.transfer.Transfer.source">
-<code class="descname">source</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.source" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="transfer_blend_shape.transfer.Transfer.set_virtual_mesh">
+<code class="descname">set_virtual_mesh</code><span class="sig-paren">(</span><em>virtual_mesh</em><span class="sig-paren">)</span><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.set_virtual_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>virtual_mesh</strong> (<em>str</em>) – </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="transfer_blend_shape.transfer.Transfer.source_mesh">
+<code class="descname">source_mesh</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.source_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source mesh</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
@@ -448,90 +572,15 @@ out the smooth.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="transfer_blend_shape.transfer.Transfer.source_area">
-<code class="descname">source_area</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.source_area" title="Permalink to this definition">¶</a></dt>
+<dt id="transfer_blend_shape.transfer.Transfer.target_mesh">
+<code class="descname">target_mesh</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.target_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source area</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="transfer_blend_shape.transfer.Transfer.source_fn">
-<code class="descname">source_fn</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.source_fn" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source fn</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MFnMesh</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="transfer_blend_shape.transfer.Transfer.source_points">
-<code class="descname">source_points</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.source_points" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Source points</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="transfer_blend_shape.transfer.Transfer.target">
-<code class="descname">target</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.target" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target mesh</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="transfer_blend_shape.transfer.Transfer.target_fn">
-<code class="descname">target_fn</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.target_fn" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target fn</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OpenMaya.MFnMesh</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="transfer_blend_shape.transfer.Transfer.target_points">
-<code class="descname">target_points</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.target_points" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Target points</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.Array</td>
 </tr>
 </tbody>
 </table>
@@ -547,6 +596,21 @@ out the smooth.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Threshold</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="transfer_blend_shape.transfer.Transfer.virtual_mesh">
+<code class="descname">virtual_mesh</code><a class="headerlink" href="#transfer_blend_shape.transfer.Transfer.virtual_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Virtual</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
