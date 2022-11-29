@@ -26,8 +26,6 @@ jobs:
            pip: "2.7/get-pip.py"
          - maya: "2022"
            pip: "get-pip.py"
-         - maya: "2023"
-           pip: "get-pip.py"
 
     container: mottosso/maya:${{ matrix.maya }}
 
